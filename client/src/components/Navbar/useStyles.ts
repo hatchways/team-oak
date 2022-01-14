@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 export const useStyles = makeStyles((theme: Theme) => ({
   navbar: {
     boxShadow: '4px 4px 13px 7px rgba(217,217,217,0.26)',
-    padding: theme.spacing(3, 6),
+    padding: theme.spacing(2, 4),
     background: 'white',
     height: '80px',
     position: 'sticky',

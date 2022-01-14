@@ -21,7 +21,6 @@ import { Settings, Logout, Person } from '@mui/icons-material';
 
 const NavbarButton = styled(Button)({
   padding: '10px 0',
-  width: 130,
 });
 
 const menuItems = [
@@ -137,7 +136,7 @@ const Navbar: React.FC = () => {
         <img className={classes.navbarLogo} src={lovingSitterLogo} />
       </Grid>
       <Grid xs={8} md={6} item>
-        <Grid container alignItems="center" gap={4} justifyContent="flex-end">
+        <Grid container alignItems="center" gap={2} justifyContent="flex-end">
           {renderMenuItems()}
           {loggedInUser && (
             <Grid xs={2} item>
