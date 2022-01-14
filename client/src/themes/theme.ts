@@ -12,5 +12,11 @@ export const theme = createTheme({
     button: {
       fontWeight: 700,
     },
+
+    h1: {
+      fontSize: '3rem',
+      fontWeight: 600,
+      color: '#000',
+    },
   },
 });

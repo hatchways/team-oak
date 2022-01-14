@@ -20,7 +20,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person } from '@mui/icons-material';
 
 const NavbarButton = styled(Button)({
-  padding: '15px 0',
+  padding: '10px 0',
+  width: 130,
 });
 
 const menuItems = [
@@ -84,7 +85,10 @@ const MenuItem: React.FC<{
 
   return (
     <Grid key={resource} sx={{ textAlign: 'center' }} xs={2} justifySelf="flex-end" item>
-      <NavLink className={classes.navbarItem} to={resource}>
+      <NavLink
+        className={clsx(classes.navbarItem, location.pathname === '/' && classes.transparentNavbarItem)}
+        to={resource}
+      >
         {item}
       </NavLink>
     </Grid>
@@ -133,7 +137,7 @@ const Navbar: React.FC = () => {
         <img className={classes.navbarLogo} src={lovingSitterLogo} />
       </Grid>
       <Grid xs={8} md={6} item>
-        <Grid container alignItems="center" gap={2} justifyContent="flex-end">
+        <Grid container alignItems="center" gap={4} justifyContent="flex-end">
           {renderMenuItems()}
           {loggedInUser && (
             <Grid xs={2} item>
