@@ -12,18 +12,6 @@ interface DemoButtonProps {
 
 const DemoButton: React.FC<DemoButtonProps> = ({ demoEmail, demoPassword }) => {
   const classes = useStyles();
-  const { updateLoginContext } = useAuth();
-  const { updateSnackBarMessage } = useSnackBar();
-
-  const demoLogin = () => {
-    login(demoEmail, demoPassword).then((data) => {
-      if (data.error) {
-        updateSnackBarMessage(data.error.message);
-      } else if (data.success) {
-        updateLoginContext(data.success);
-      }
-    });
-  };
 
   return (
     <Box
@@ -40,7 +28,6 @@ const DemoButton: React.FC<DemoButtonProps> = ({ demoEmail, demoPassword }) => {
         variant="contained"
         className={classes.demo}
         disableElevation
-        onClick={demoLogin}
         sx={{ backgroundColor: '#f89c9b' }}
       >
         Demo
