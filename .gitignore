@@ -25,3 +25,9 @@ __snapshots__
 
 # debug & other vs code settings
 .vscode
+server/.nyc_output
+
+# jetbrains settings
+.idea
+/client/build/favicon.ico
+/client/build/manifest.json
