@@ -1,28 +1,5 @@
 const mongoose = require("mongoose");
-
-const addressSchema = new mongoose.Schema({
-  pickup: {
-    type: String,
-    required: true,
-    default: null,
-  },
-  service: {
-    type: String,
-    ref: "Profile",
-    required: true,
-    default: null,
-  },
-  dropoff: {
-    type: String,
-    default: function () {
-      if (this.pickup) {
-        return this.pickup;
-      }
-
-      return null;
-    },
-  },
-});
+const { addressSchema } = require("./Address");
 
 const requestSchema = new mongoose.Schema({
   userId: {
