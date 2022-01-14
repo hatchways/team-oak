@@ -9,7 +9,7 @@ const {
 
 router.route("/load").put(protect, loadRequests);
 
-router.route("/new").get(newRequest);
+router.route("/new").post(newRequest);
 
 router.route("/update").get(protect, updateRequest);
 
