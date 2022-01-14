@@ -10,7 +10,6 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import { Navbar } from './components/Navbar/Navbar';
 import NotFound from './pages/NotFound/NotFound';
 import { AppRouteType, appRoutes } from './routes/app';
-
 function renderRoute(route: AppRouteType, index: number): JSX.Element {
   return <Route key={index} path={route.to} component={route.component} exact={route.exact} />;
 }
