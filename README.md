@@ -14,6 +14,17 @@ This is a little description about your project.
 
 ---
 
+### Tests
+
+#### Server Tests
+
+1. Go into the server directory `cd server`
+2. Execute tests
+   1. Standard `npm test`
+   2. Coverage `npm run coverage`
+
+---
+
 ## Server
 
 1. Go into the server directory `cd server`
