@@ -19,9 +19,7 @@ This is a little description about your project.
 1. Go into the server directory `cd server`
 2. Run `npm install` to install packages
 3. Create your environment variable (.env) file
-4. Go into the seeds directory `cd seeds`
-5. Run `node demoSeed.js` to create the demo user account
-6. Go back into the server directory `cd ..`
+4. Run `npm run seeds` to create the demo user account and profile 
 5. Run `npm run dev` to start the server
 
 ---
