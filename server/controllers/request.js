@@ -5,13 +5,23 @@ const asyncHandler = require("express-async-handler");
 // @desc Get list of requests for logged-in user
 // @access Private
 exports.loadRequests = asyncHandler(async (req, res, next) => {
-  // TODO
+  const uid = req.user.id;
+  let requests;
+
+  if (uid) {
+    requests = await Request.find({
+      userId: uid,
+    });
+  }
+
+  res.status(200).json(requests);
 });
 
 // @route POST /request/new
 // @desc Create a new request
 // @access Public
 exports.newRequest = asyncHandler(async (req, res, next) => {
+  // TODO - Add address info after Model PR done
   const { validateQuery } = require("../utils/helperFunctions");
   const query = req.query;
 

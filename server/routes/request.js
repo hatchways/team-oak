@@ -7,7 +7,7 @@ const {
   updateRequest,
 } = require("../controllers/request");
 
-router.route("/load").put(protect, loadRequests);
+router.route("/load").get(protect, loadRequests);
 
 router.route("/new").post(newRequest);
 
