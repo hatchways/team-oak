@@ -10,11 +10,9 @@ const LandingPage = (): JSX.Element => {
   return (
     <Grid container sx={{ marginTop: -10 }}>
       <Grid item xs={12} md={6} className={classes.left}>
-        <Typography variant="h1" sx={{ marginBottom: 7 }}>
-          Find the care your dog deserves
-        </Typography>
+        <Typography className={classes.heading}>Find the care your dog deserves</Typography>
 
-        <Box sx={{ width: '65%' }}>
+        <Box className={classes.formWrapper}>
           <FormInput id="Where" label="Where" placeholder="Anywhere" />
 
           <Box className={classes.inputWrapper}>
@@ -31,7 +29,7 @@ const LandingPage = (): JSX.Element => {
 
       <Grid item xs={12} md={6}>
         <Box className={classes.imageWrapper}>
-          <img src={landingPage} alt="" className={classes.image} />
+          <img src={landingPage} alt="landing" className={classes.image} />
         </Box>
       </Grid>
     </Grid>

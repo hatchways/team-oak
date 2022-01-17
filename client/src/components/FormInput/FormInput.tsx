@@ -23,8 +23,6 @@ interface FormInputProps {
   selectOptions?: Array<{ label: string; value: string }> | undefined;
   selectValue?: string;
 
-  placeholder?: string;
-
   [inputProps: string]: any;
 }
 
@@ -35,7 +33,6 @@ const FormInput: React.FC<FormInputProps> = ({
   selectOptions,
   selectValue,
   defaultValue,
-  placeholder,
   ...rest
 }) => {
   return (
@@ -61,7 +58,7 @@ const FormInput: React.FC<FormInputProps> = ({
           ))}
         </Select>
       ) : (
-        <StyledInput placeholder={placeholder} defaultValue={defaultValue} id={id} {...rest} />
+        <StyledInput defaultValue={defaultValue} id={id} {...rest} />
       )}
     </FormControl>
   );
