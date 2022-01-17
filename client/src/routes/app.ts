@@ -28,14 +28,12 @@ export const appRoutes = [
     to: '/dashboard',
     component: Dashboard,
     canView: [AccountType.PET_OWNER, AccountType.PET_SITTER],
-    authenticated: true,
     exact: true,
   },
   {
     to: '/profile/settings',
     component: Settings,
     canView: [AccountType.PET_OWNER, AccountType.PET_SITTER],
-    authenticaed: true,
     exact: false,
   },
 ];
