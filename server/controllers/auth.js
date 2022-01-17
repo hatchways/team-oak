@@ -2,6 +2,8 @@ const User = require("../models/User");
 const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const dotenv = require('dotenv').config({path:__dirname+'/./../.env'})
+const loginHelper = require('../helpers/loginHelper');
 
 // @route POST /auth/register
 // @desc Register user
@@ -63,31 +65,16 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 // @access Public
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
+  await loginHelper(res, email, password);
+});
 
-  const user = await User.findOne({ email });
-
-  if (user && (await user.matchPassword(password))) {
-    const token = generateToken(user._id);
-    const secondsInWeek = 604800;
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: secondsInWeek * 1000
-    });
-
-    res.status(200).json({
-      success: {
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email
-        }
-      }
-    });
-  } else {
-    res.status(401);
-    throw new Error("Invalid email or password");
-  }
+// @route POST /auth/demo
+// @desc Login DEMO user
+// @access Public
+exports.demoUser = asyncHandler(async (req, res, next) => {  
+  const email = process.env.DEMO_USER_EMAIL
+  const password = process.env.DEMO_USER_PASSWORD
+  await loginHelper(res, email, password);
 });
 
 // @route GET /auth/user
