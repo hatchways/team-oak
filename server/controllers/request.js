@@ -12,7 +12,22 @@ exports.loadRequests = asyncHandler(async (req, res, next) => {
 // @desc Create a new request
 // @access Public
 exports.newRequest = asyncHandler(async (req, res, next) => {
-  // TODO
+  const { validateQuery } = require("../utils/helperFunctions");
+  const query = req.query;
+
+  validateQuery(query);
+
+  const request = new Request({
+    userId: query.userId,
+    sitterId: query.sitterId,
+    start: query.start,
+    end: query.end,
+    accepted: query.accepted,
+    declined: query.declined,
+    paid: query.paid,
+  });
+
+  res.status(200).json(request);
 });
 
 // @route UPDATE /request/update
