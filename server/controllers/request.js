@@ -15,7 +15,7 @@ exports.newRequest = asyncHandler(async (req, res, next) => {
   const { validateQuery } = require("../utils/helperFunctions");
   const query = req.query;
 
-  validateQuery(query);
+  validateQuery(res, query);
 
   const request = new Request({
     userId: query.userId,
@@ -27,7 +27,11 @@ exports.newRequest = asyncHandler(async (req, res, next) => {
     paid: query.paid,
   });
 
-  res.status(200).json(request);
+  if (!(await request.save())) {
+    res.status(500).send("There was an error saving your request");
+  }
+
+  res.status(200).send("Successfully saved request!");
 });
 
 // @route UPDATE /request/update

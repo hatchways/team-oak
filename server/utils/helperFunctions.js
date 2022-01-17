@@ -15,7 +15,7 @@ function isObjectIdValid(id) {
   }
 }
 
-module.exports.validateQuery = function validateQuery(query) {
+module.exports.validateQuery = function validateQuery(res, query) {
   if (!isObjectIdValid(query.userId)) {
     res.status(400);
     throw new Error("Invalid userId");
