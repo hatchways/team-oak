@@ -48,11 +48,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   drawer: {
     '&>.MuiPaper-root': {
-      width: 250,
+      width: 200,
       display: 'block',
 
       '&>.MuiGrid-root': {
-        paddingTop: theme.spacing(4),
+        padding: theme.spacing(4),
       },
     },
   },

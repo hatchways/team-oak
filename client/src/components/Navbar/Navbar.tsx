@@ -97,60 +97,6 @@ const MenuItem: React.FC<{
   );
 };
 
-const Navbar: React.FC = () => {
-  const location = useLocation();
-  const classes = useStyles();
-  const [displayDrawer, setDisplayDrawer] = useState<boolean>(false);
-  const isDesktop = useMediaQuery('(min-width: 600px)');
-
-  const toggleDrawer = (toggle: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event &&
-      event.type === 'keydown' &&
-      ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
-    ) {
-      return;
-    }
-
-    setDisplayDrawer(toggle);
-  };
-
-  return (
-    <Grid
-      className={clsx(classes.navbar, location.pathname === '/' && classes.transparentNavbar)}
-      justifyContent="space-between"
-      alignItems="center"
-      container
-    >
-      <Grid xs={4} md={6} item>
-        <img className={classes.navbarLogo} src={lovingSitterLogo} />
-      </Grid>
-      <Grid xs={8} md={6} item display="flex" justifyContent="flex-end">
-        {isDesktop ? (
-          <MenuItems />
-        ) : (
-          <Box>
-            <IconButton onClick={toggleDrawer(true)}>
-              <MenuIcon sx={{ color: '#000', fontSize: '30px' }} />
-            </IconButton>
-            <SwipeableDrawer
-              anchor="right"
-              open={displayDrawer}
-              onClose={toggleDrawer(false)}
-              onOpen={toggleDrawer(true)}
-              className={classes.drawer}
-            >
-              <MenuItems />
-            </SwipeableDrawer>
-          </Box>
-        )}
-      </Grid>
-    </Grid>
-  );
-};
-
-export { Navbar };
-
 const MenuItems = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const { loggedInUser, logout } = useAuth();
@@ -186,7 +132,7 @@ const MenuItems = () => {
     <Grid
       container
       direction={{ xs: 'column', sm: 'row' }}
-      alignItems="center"
+      alignItems={{ xs: 'flex-start', sm: 'center' }}
       gap={{ xs: 4, sm: 2 }}
       justifyContent="flex-end"
       ref={menuRef}
@@ -246,3 +192,58 @@ const MenuItems = () => {
     </Grid>
   );
 };
+
+const Navbar: React.FC = () => {
+  const location = useLocation();
+  const classes = useStyles();
+
+  const [displayDrawer, setDisplayDrawer] = useState<boolean>(false);
+  const isDesktop = useMediaQuery('(min-width: 700px)');
+
+  const toggleDrawer = (toggle: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return;
+    }
+
+    setDisplayDrawer(toggle);
+  };
+
+  return (
+    <Grid
+      className={clsx(classes.navbar, location.pathname === '/' && classes.transparentNavbar)}
+      justifyContent="space-between"
+      alignItems="center"
+      container
+    >
+      <Grid xs={4} md={6} item>
+        <img className={classes.navbarLogo} src={lovingSitterLogo} />
+      </Grid>
+      <Grid xs={8} md={6} item display="flex" justifyContent="flex-end">
+        {isDesktop ? (
+          <MenuItems />
+        ) : (
+          <Box>
+            <IconButton onClick={toggleDrawer(true)}>
+              <MenuIcon sx={{ color: '#000', fontSize: '30px' }} />
+            </IconButton>
+            <SwipeableDrawer
+              anchor="right"
+              open={displayDrawer}
+              onClose={toggleDrawer(false)}
+              onOpen={toggleDrawer(true)}
+              className={classes.drawer}
+            >
+              <MenuItems />
+            </SwipeableDrawer>
+          </Box>
+        )}
+      </Grid>
+    </Grid>
+  );
+};
+
+export { Navbar };

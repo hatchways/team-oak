@@ -3,13 +3,24 @@ import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles((theme: Theme) => ({
   left: {
-    paddingLeft: 'clamp(10px, 10vw, 150px)',
-    paddingRight: 'clamp(5px, 5vw, 100px)',
     paddingTop: theme.spacing(15),
+    paddingLeft: theme.spacing(14),
+    paddingRight: theme.spacing(10),
+
+    [theme.breakpoints.down('lg')]: {
+      paddingLeft: theme.spacing(10),
+      paddingRight: theme.spacing(6),
+    },
 
     [theme.breakpoints.down('md')]: {
       display: 'grid',
       placeItems: 'center',
+      paddingRight: theme.spacing(10),
+    },
+
+    [theme.breakpoints.down('sm')]: {
+      paddingLeft: theme.spacing(),
+      paddingRight: theme.spacing(),
     },
   },
   heading: {
