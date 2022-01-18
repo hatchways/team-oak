@@ -7,10 +7,19 @@ import AuthPageWrapper from '../../components/AuthPageWrapper/AuthPageWrapper';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import AuthPageFooter from '../../components/AuthPageFooter/AuthPageFooter';
 import DemoButton from '../Login/DemoButton';
+import demo from '../../helpers/APICalls/demo';
 
 export default function Register(): JSX.Element {
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
+
+  const demoLogin = () => {
+    demo().then((data) => {
+      if (data.success) {
+        updateLoginContext(data.success);
+      }
+    });
+  };
 
   const handleSubmit = (
     { name, email, password }: { email: string; password: string; name: string },
@@ -37,7 +46,7 @@ export default function Register(): JSX.Element {
     <PageContainer>
       <AuthPageWrapper header="Sign up">
         <SignUpForm handleSubmit={handleSubmit} />
-        <DemoButton demoEmail="demo@demo.com" demoPassword="demoPass"></DemoButton>
+        <DemoButton handleClick={demoLogin}></DemoButton>
         <AuthPageFooter text="Already a member?" anchorText="Login" anchorTo="/login" />
       </AuthPageWrapper>
     </PageContainer>

@@ -1,16 +1,12 @@
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import useStyles from './LoginForm/useStyles';
-import { useSnackBar } from '../../context/useSnackbarContext';
-import login from '../../helpers/APICalls/login';
-import { useAuth } from '../../context/useAuthContext';
 
-interface DemoButtonProps {
-  demoEmail: string;
-  demoPassword: string;
+interface demoButtonProps {
+  handleClick: VoidFunction;
 }
 
-const DemoButton: React.FC<DemoButtonProps> = ({ demoEmail, demoPassword }) => {
+function DemoButton(props: demoButtonProps): JSX.Element {
   const classes = useStyles();
 
   return (
@@ -29,11 +25,12 @@ const DemoButton: React.FC<DemoButtonProps> = ({ demoEmail, demoPassword }) => {
         className={classes.demo}
         disableElevation
         sx={{ backgroundColor: '#f89c9b' }}
+        onClick={props.handleClick}
       >
         Demo
       </Button>
     </Box>
   );
-};
+}
 
 export default DemoButton;
