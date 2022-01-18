@@ -9,9 +9,9 @@ import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 import { Navbar } from './components/Navbar/Navbar';
 import NotFound from './pages/NotFound/NotFound';
-import { appRouteType, appRoutes } from './routes/app';
+import { AppRouteType, appRoutes } from './routes/app';
 
-function renderRoute(route: appRouteType, index: number): JSX.Element {
+function renderRoute(route: AppRouteType, index: number): JSX.Element {
   return <Route key={index} path={route.to} component={route.component} exact={route.exact} />;
 }
 

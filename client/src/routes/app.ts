@@ -4,14 +4,14 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 import Settings from '../pages/Settings/Settings';
 import { AccountType } from '../types/AccountType';
 
-export interface appRouteType {
+export interface AppRouteType {
   to: string;
   component: React.ComponentType;
   canView: Array<string>;
   exact: boolean;
 }
 
-export const appRoutes = [
+export const appRoutes: AppRouteType[] = [
   {
     to: '/login',
     component: Login,
