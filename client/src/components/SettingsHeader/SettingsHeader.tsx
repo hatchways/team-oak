@@ -12,8 +12,9 @@ const SettingHeader: React.FC<SettingHeaderProps> = ({ header }) => {
         variant="h3"
         sx={{
           fontWeight: 700,
+          fontSize: '22px',
           textAlign: 'center',
-          marginBottom: 8,
+          marginBottom: 6,
         }}
       >
         {header}

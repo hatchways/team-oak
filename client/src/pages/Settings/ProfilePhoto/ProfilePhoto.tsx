@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import SettingHeader from '../../../components/SettingsHeader/SettingsHeader';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import { Input } from '@mui/material';
@@ -18,16 +19,7 @@ const openFileSelector = () => {
 const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ header, imageUrl }) => {
   return (
     <Box sx={{ textAlign: 'center' }}>
-      <Typography
-        variant="h3"
-        sx={{
-          fontWeight: 700,
-          fontSize: '20px',
-          marginBottom: 6,
-        }}
-      >
-        {header}
-      </Typography>
+      <SettingHeader header={header} />
 
       <Avatar
         id="photo"
