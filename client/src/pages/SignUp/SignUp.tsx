@@ -6,7 +6,7 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import AuthPageWrapper from '../../components/AuthPageWrapper/AuthPageWrapper';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import AuthPageFooter from '../../components/AuthPageFooter/AuthPageFooter';
-import DemoButton from '../Login/DemoButton';
+import DemoButton from '../../components/DemoButton/DemoButton';
 import demo from '../../helpers/APICalls/demo';
 
 export default function Register(): JSX.Element {

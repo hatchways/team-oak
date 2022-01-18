@@ -6,7 +6,7 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import AuthPageWrapper from '../../components/AuthPageWrapper/AuthPageWrapper';
 import AuthPageFooter from '../../components/AuthPageFooter/AuthPageFooter';
-import DemoButton from './DemoButton';
+import DemoButton from '../../components/DemoButton/DemoButton';
 import demo from '../../helpers/APICalls/demo';
 
 export default function Login(): JSX.Element {

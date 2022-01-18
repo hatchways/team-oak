@@ -1,12 +1,12 @@
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import useStyles from './LoginForm/useStyles';
+import useStyles from '../../pages/Login/LoginForm/useStyles';
 
 interface DemoButtonProps {
   handleClick: VoidFunction;
 }
 
-function DemoButton(props: DemoButtonProps): JSX.Element {
+const DemoButton = (props: DemoButtonProps): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -31,6 +31,6 @@ function DemoButton(props: DemoButtonProps): JSX.Element {
       </Button>
     </Box>
   );
-}
+};
 
 export default DemoButton;
