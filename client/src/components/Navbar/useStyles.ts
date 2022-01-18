@@ -4,8 +4,10 @@ import { makeStyles } from '@mui/styles';
 export const useStyles = makeStyles((theme: Theme) => ({
   navbar: {
     boxShadow: '4px 4px 13px 7px rgba(217,217,217,0.26)',
-    padding: theme.spacing(2),
+    padding: theme.spacing(0, 4),
     background: 'white',
+    height: '80px',
+    position: 'sticky',
   },
   transparentNavbar: {
     boxShadow: 'none',
@@ -20,7 +22,38 @@ export const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.primary.main,
     },
   },
+  transparentNavbarItem: {
+    color: 'white',
+
+    '&>.MuiButton-outlined': {
+      color: 'white',
+      borderColor: 'white',
+
+      '&:hover': {
+        color: theme.palette.primary.main,
+      },
+    },
+
+    [theme.breakpoints.down('md')]: {
+      color: 'black',
+
+      '&>.MuiButton-outlined': {
+        color: theme.palette.primary.main,
+        borderColor: theme.palette.primary.main,
+      },
+    },
+  },
   navbarLogo: {
     width: 180,
+  },
+  drawer: {
+    '&>.MuiPaper-root': {
+      width: 200,
+      display: 'block',
+
+      '&>.MuiGrid-root': {
+        padding: theme.spacing(4),
+      },
+    },
   },
 }));
