@@ -2,11 +2,11 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import useStyles from './LoginForm/useStyles';
 
-interface demoButtonProps {
+interface DemoButtonProps {
   handleClick: VoidFunction;
 }
 
-function DemoButton(props: demoButtonProps): JSX.Element {
+function DemoButton(props: DemoButtonProps): JSX.Element {
   const classes = useStyles();
 
   return (
