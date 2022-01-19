@@ -1,5 +1,5 @@
-import { Grid, Box, Typography, Card, CardMedia, CardContent } from '@material-ui/core';
-import RoomIcon from '@material-ui/icons/Room';
+import { Grid, Box, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import useStyles from './useStyles';
 import BookingForm from './BookingForm/BookingForm';
 
@@ -16,8 +16,6 @@ const profile = {
   aboutImg: [
     '2253275/pexels-photo-2253275.jpeg?auto=compress&cs=tinysrgb',
     '4681107/pexels-photo-4681107.jpeg?auto=compress&cs=tinysrgb',
-    '2007/animal-dog-pet-cute.jpg?auto=compress&cs=tinysrgb',
-    '2623968/pexels-photo-2623968.jpeg?auto=compress&cs=tinysrgb',
   ],
 };
 
@@ -25,9 +23,9 @@ const ProfileDetail = (): JSX.Element => {
   const classes = useStyles();
 
   return (
-    <Grid container className={classes.rootContainer} justify="space-evenly">
-      <Grid item xs={12} sm={12} md={7} lg={7}>
-        <Box margin="0 auto" display="grid">
+    <Grid container className={classes.rootContainer}>
+      <Grid item xs={12} sm={12} md={7} lg={7} sx={{ m: 1 }}>
+        <Box className={classes.boxProfile}>
           <Card className={classes.profileCard}>
             <CardMedia
               className={classes.backgroundImg}
@@ -36,15 +34,17 @@ const ProfileDetail = (): JSX.Element => {
             />
             <CardContent className={classes.topCardContent}>
               <CardMedia className={classes.userImg} image={profile.imageImg} title="Profile image" />
-              <Typography className={classes.userNameText}>{profile.name}</Typography>
+              <Typography variant="h6" className={classes.userNameText}>
+                {profile.name}
+              </Typography>
               <Typography className={classes.userTitleText}>{profile.aboutMe}</Typography>
-              <Box marginTop="20px" display="flex">
-                <RoomIcon className={classes.userLocationIcon} />
+              <Box className={classes.boxLocation}>
+                <LocationOnIcon className={classes.userLocationIcon} />
                 <Typography className={classes.userLocationText}>{profile.location}</Typography>
               </Box>
             </CardContent>
             <CardContent className={classes.bottomCardContent}>
-              <Box marginTop="10px" width="100%" textAlign="left" marginBottom="30px">
+              <Box className={classes.boxBottomCard}>
                 <Typography variant="h5" className={classes.userDescriptionHeaderText}>
                   About me
                 </Typography>
@@ -64,7 +64,7 @@ const ProfileDetail = (): JSX.Element => {
           </Card>
         </Box>
       </Grid>
-      <Grid item xs={12} sm={12} md={3} lg={3}>
+      <Grid item xs={12} sm={12} md={3} lg={3} sx={{ m: 1 }}>
         <BookingForm></BookingForm>
       </Grid>
     </Grid>

@@ -1,6 +1,7 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   bookingFormCard: {
     width: '100%',
     justifySelf: 'flex-end',
@@ -11,30 +12,25 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   userRateText: {
-    marginTop: 40,
-    marginBottom: 10,
     color: 'black',
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
   profileDetailsForm: {
     width: '100%',
-    marginTop: 50,
+    marginTop: 30,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
   profileDetailsLabel: {
     color: 'black',
+    marginBotton: '2rem',
     fontWeight: 'bold',
-    textTransform: 'uppercase',
-    alignSelf: 'flex-start',
-    marginLeft: '10%',
+    alignSelf: 'center',
   },
   profileDetailsFormContainer: {
-    width: '80%',
+    width: '50%',
     display: 'grid',
-    gridTemplateColumns: '50fr 50fr',
   },
   profileDetailsFormInput: {
     borderTopRightRadius: 0,
@@ -44,22 +40,8 @@ const useStyles = makeStyles((theme) => ({
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
   },
-  requestFormButton: {
-    marginTop: 70,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    padding: 10,
-    marginBottom: 35,
-    fontSize: 14,
-    color: 'white',
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    transition: '1s',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.primary.main,
-    '&:hover': {
-      backgroundColor: '#30E664',
-    },
+  buttonContainer: {
+    marginTop: 20,
   },
 }));
 
