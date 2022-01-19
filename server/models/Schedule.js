@@ -13,71 +13,71 @@ const scheduleSchema = new mongoose.Schema({
   periods: {
     monday: {
       startTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       endTime: {
-        type: Date,
+        type: String,
         required: true,
       },
     },
     tuesday: {
       startTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       endTime: {
-        type: Date,
+        type: String,
         required: true,
       },
     },
     wednesday: {
       startTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       endTime: {
-        type: Date,
+        type: String,
         required: true,
       },
     },
     thursday: {
       startTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       endTime: {
-        type: Date,
+        type: String,
         required: true,
       },
     },
     friday: {
       startTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       endTime: {
-        type: Date,
+        type: String,
         required: true,
       },
     },
     saturday: {
       startTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       endTime: {
-        type: Date,
+        type: String,
         required: true,
       },
     },
     sunday: {
       startTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       endTime: {
-        type: Date,
+        type: String,
         required: true,
       },
     },
