@@ -25,10 +25,10 @@ exports.loadRequests = asyncHandler(async (req, res, next) => {
 // @desc Create a new request
 // @access Public
 exports.newRequest = asyncHandler(async (req, res, next) => {
-  const { validateQuery } = require("../utils/helperFunctions");
+  const { validateQueryForNewRequest } = require("../utils/helperFunctions");
   const query = req.query;
 
-  validateQuery(res, query);
+  validateQueryForNewRequest(res, query);
 
   const request = new Request({
     userId: query.userId,

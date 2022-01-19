@@ -13,7 +13,7 @@
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /**
- * Check req.query for specified empty fields
+ * Check req.query for specified empty fields.
  * @param {Object} req - Express request object
  * @param {String} fieldsToCheck - Comma separated keys from req to check
  * @returns {Array} Array of fields that were checked
@@ -34,7 +34,7 @@ module.exports.checkQueryForEmptyFields = function checkQueryForEmptyFields(
 };
 
 /**
- * Update specified fields of Mongoose request object with values from req.query
+ * Update specified fields of Mongoose request object with values from req.query.
  * @param {Object} request - Mongoose request object
  * @param {Array<String>} fieldsToChange - Array of fields to update
  * @param {Object} req - Express request object
@@ -67,18 +67,14 @@ module.exports.updateRequest = function updateRequest(
   }
 };
 
-// Compares string version of id against string version of new ObjectId
-// with id provided as a parameter. If original id isn't a valid ObjectId,
-// String(new ObjectId(id)) will create a new object with a mismatched id.
-function isObjectIdValid(id) {
-  if (ObjectId.isValid(id)) {
-    return String(new ObjectId(id)) === String(id);
-  } else {
-    return false;
-  }
-}
-
-module.exports.validateQuery = function validateQuery(res, query) {
+/**
+ * Provides extra validation for creation of a new Request object to be placed
+ * in the database.
+ * @param {Object} res - Express res object to forward errors
+ * @param {Request} query - Express req.query Request object
+ * @returns {void}
+ */
+module.exports.validateQueryForNewRequest = function validateQuery(res, query) {
   if (!isObjectIdValid(query.userId)) {
     res.status(400);
     throw new Error("Invalid userId");
@@ -112,6 +108,27 @@ module.exports.validateQuery = function validateQuery(res, query) {
   }
 };
 
+/** Compares string version of id against string version of new ObjectId
+ * with id provided as a parameter. If original id isn't a valid ObjectId,
+ * `String(new ObjectId(id))` will create a new object with a mismatched id.
+ * @param {String} id - String (or anything that can be cast as String) containing
+ * id to be checked
+ * @returns {Boolean} Returns true if id is valid, false otherwise
+ */
+function isObjectIdValid(id) {
+  if (ObjectId.isValid(id)) {
+    return String(new ObjectId(id)) === String(id);
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Checks for boolean values while accepting strings "true", "false", "1", or "0"
+ * as their boolean equivalents.
+ * @param {Array} values - Array to check for boolean values
+ * @returns {Boolean} Returns true if values are all boolean, false otherwise
+ */
 function isArrayBoolean(...values) {
   for (let value of values) {
     if (value === "true" || value === "1") {
