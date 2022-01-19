@@ -52,7 +52,7 @@ exports.newRequest = asyncHandler(async (req, res, next) => {
   res.status(200).send("Successfully saved request!");
 });
 
-// @route UPDATE /request/update
+// @route PATCH /request/update
 // @desc Update request with approved or declined
 // @access Private
 exports.updateRequest = asyncHandler(async (req, res, next) => {

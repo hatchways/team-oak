@@ -11,6 +11,6 @@ router.route("/load").get(protect, loadRequests);
 
 router.route("/new").post(newRequest);
 
-router.route("/update").get(protect, updateRequest);
+router.route("/update").patch(protect, updateRequest);
 
 module.exports = router;
