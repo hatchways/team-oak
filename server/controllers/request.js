@@ -1,5 +1,9 @@
 const Request = require("../models/Request");
 const asyncHandler = require("express-async-handler");
+const {
+  updateRequest,
+  checkQueryForEmptyFields,
+} = require("../utils/helperFunctions");
 
 // @route GET /request/load
 // @desc Get list of requests for logged-in user
@@ -56,5 +60,29 @@ exports.newRequest = asyncHandler(async (req, res, next) => {
 // @desc Update request with approved or declined
 // @access Private
 exports.updateRequest = asyncHandler(async (req, res, next) => {
-  // TODO
+  const requestId = req.query.requestId;
+
+  const fieldsToChange = checkQueryForEmptyFields(
+    req,
+    "accepted",
+    "declined",
+    "paid"
+  );
+
+  let request;
+  if (requestId) {
+    request = await Request.findOne({
+      _id: requestId,
+    });
+  } else {
+    throw new Error("requestID field required to find proper request");
+  }
+
+  request = updateRequest(request, fieldsToChange, req);
+
+  if (!(await request.save())) {
+    res.status(500).send("There was an error saving your updated request");
+  }
+
+  res.status(200).send("Successfully updated request!");
 });
