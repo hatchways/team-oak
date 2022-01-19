@@ -1,8 +1,13 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   rootContainer: {
-    marginTop: '2em',
+    marginTop: '1em',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    spacing: 1,
+    marginBottom: '1em',
   },
   profileCard: {
     width: '100%',
@@ -10,32 +15,38 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: '2em',
+  },
+  boxProfile: {
+    margin: '0 auto',
+    display: 'grid',
   },
   topCardContent: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
+  boxLocation: {
+    marginTop: '1.25rem',
+    display: 'flex',
+  },
   backgroundImg: {
     width: '100%',
-    height: '25vh',
+    height: '30vh',
     objectFit: 'cover',
   },
   userImg: {
-    width: '15vh',
-    height: '15vh',
+    width: '20vh',
+    height: '20vh',
     objectFit: 'cover',
     borderRadius: '50%',
-    border: 'white 7px solid',
+    border: 'white 2px solid',
     boxSizing: 'border-box',
-    marginTop: '-6vh',
-    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+    marginTop: '-15vh',
+    boxShadow: 'rgba(0, 0, 0, 0.50) 0px 3px 8px',
   },
   userNameText: {
     marginTop: 20,
     color: 'black',
-    fontSize: 22,
     fontWeight: 'bold',
   },
   userTitleText: {
@@ -53,7 +64,12 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   bottomCardContent: {
-    padding: 30,
+    padding: 10,
+  },
+  boxBottomCard: {
+    width: '100%',
+    textAlign: 'left',
+    marginBottom: '1.875rem',
   },
   userDescriptionHeaderText: {
     color: 'black',
