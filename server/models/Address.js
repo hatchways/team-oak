@@ -32,7 +32,6 @@ exports.addressSchema = new mongoose.Schema({
       validator: function (value) {
         // Allows: h2t-1b8; h2z 1b8; H2Z1B8
         // Disallows: Z2T 1B8 (leading Z); H2T 1O3 (contains O); Leading Z,W or to contain D, F, I, O, Q or U
-        // Credit: https://stackoverflow.com/a/46761018
         return /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i.test(
           value
         );
