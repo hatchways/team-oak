@@ -21,7 +21,6 @@ exports.loadRequests = asyncHandler(async (req, res, next) => {
 // @desc Create a new request
 // @access Public
 exports.newRequest = asyncHandler(async (req, res, next) => {
-  // TODO - Add address info after Model PR done
   const { validateQuery } = require("../utils/helperFunctions");
   const query = req.query;
 
@@ -35,6 +34,15 @@ exports.newRequest = asyncHandler(async (req, res, next) => {
     accepted: query.accepted,
     declined: query.declined,
     paid: query.paid,
+    address: {
+      houseNumber: query.address.houseNumber,
+      street: query.address.street,
+      district: query.address.district,
+      city: query.address.city,
+      county: query.address.county,
+      postalCode: query.address.postalCode,
+      country: query.address.country,
+    },
   });
 
   if (!(await request.save())) {

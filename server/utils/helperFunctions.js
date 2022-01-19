@@ -53,7 +53,7 @@ module.exports.validateQuery = function validateQuery(res, query) {
 };
 
 function isArrayBoolean(...values) {
-  for (value of values) {
+  for (let value of values) {
     if (value === "true" || value === "1") {
       value = true;
     } else if (value === "false" || value === "0") {
