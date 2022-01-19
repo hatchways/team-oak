@@ -6,10 +6,20 @@ import { useSnackBar } from '../../context/useSnackbarContext';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import AuthPageWrapper from '../../components/AuthPageWrapper/AuthPageWrapper';
 import AuthPageFooter from '../../components/AuthPageFooter/AuthPageFooter';
+import DemoButton from '../../components/DemoButton/DemoButton';
+import demo from '../../helpers/APICalls/demo';
 
 export default function Login(): JSX.Element {
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
+
+  const demoLogin = () => {
+    demo().then((data) => {
+      if (data.success) {
+        updateLoginContext(data.success);
+      }
+    });
+  };
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
@@ -35,6 +45,7 @@ export default function Login(): JSX.Element {
     <PageContainer>
       <AuthPageWrapper header="Log in">
         <LoginForm handleSubmit={handleSubmit} />
+        <DemoButton handleClick={demoLogin}></DemoButton>
         <AuthPageFooter text="Not a member?" anchorText="Sign up" anchorTo="/signup" />
       </AuthPageWrapper>
     </PageContainer>
