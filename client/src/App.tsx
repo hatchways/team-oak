@@ -4,15 +4,16 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from './themes/theme';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from './pages/Login/Login';
-import Signup from './pages/SignUp/SignUp';
-import Dashboard from './pages/Dashboard/Dashboard';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 import { Navbar } from './components/Navbar/Navbar';
-import Settings from './pages/Settings/Settings';
 import NotFound from './pages/NotFound/NotFound';
+import { AppRouteType, appRoutes } from './routes/app';
+
+function renderRoute(route: AppRouteType, index: number): JSX.Element {
+  return <Route key={index} path={route.to} component={route.component} exact={route.exact} />;
+}
 
 function App(): JSX.Element {
   return (
@@ -24,10 +25,7 @@ function App(): JSX.Element {
               <CssBaseline />
               <Navbar />
               <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                <Route exact path="/dashboard" component={Dashboard} />
-                <Route path="/profile/settings" component={Settings} />
+                {appRoutes.map((route, index) => renderRoute(route, index))}
                 <Route path="*">
                   <NotFound />
                 </Route>

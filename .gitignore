@@ -14,6 +14,7 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+server/.env
 
 npm-debug.log*
 yarn-debug.log*
@@ -22,12 +23,14 @@ yarn-error.log*
 
 #TODO add .env to your gitignore
 __snapshots__
+server/.nyc_output/
 
 # debug & other vs code settings
 .vscode
-server/.nyc_output
-
-# jetbrains settings
-.idea
-/client/build/favicon.ico
-/client/build/manifest.json
+/.idea/.gitignore
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/modules.xml
+/.idea/codeStyles/Project.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/team-oak.iml
+/.idea/vcs.xml
