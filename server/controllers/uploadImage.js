@@ -8,18 +8,23 @@ const { cloudinary } = require('../utils/cloudinary');
 
 exports.uploadImage = asyncHandler(async (req, res, next) => {
   try {
-    const file = dataUri(req).content;
-    const imageResponse = await cloudinary.uploader.upload(file);
-    const image = imageResponse.url;
+    const images = [];
+    const files = req.files;
+
+    for (const file of files) {
+      const uri = dataUri(file).content;
+      const imageResponse = await cloudinary.uploader.upload(uri);
+      images.push(imageResponse.url);
+    }
 
     res.status(200).json({
       messge: 'Your image has been uploded successfully to cloudinary',
       data: {
-        image,
+        images,
       },
     });
   } catch (error) {
     res.status(400);
-    throw new Error('Someting went wrong while processing your request');
+    throw new Error(error);
   }
 });

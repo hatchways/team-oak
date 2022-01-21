@@ -5,7 +5,7 @@ const path = require('path');
 const storage = multer.memoryStorage();
 const parser = new DatauriParser();
 
-const multerUploads = multer({ storage }).single('image');
-const dataUri = (req) => parser.format(path.extname(req.file.originalname).toString(), req.file.buffer);
+const multerUploads = multer({ storage }).array('images', 12);
+const dataUri = (file) => parser.format(path.extname(file.originalname).toString(), file.buffer);
 
 module.exports = { multerUploads, dataUri };
