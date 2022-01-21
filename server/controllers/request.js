@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const {
   updateRequest,
   checkQueryForEmptyFields,
+  validateQueryForNewRequest,
 } = require("../utils/helperFunctions");
 
 // @route GET /request/load
@@ -26,26 +27,32 @@ exports.loadRequests = asyncHandler(async (req, res, next) => {
 // @access Public
 exports.newRequest = asyncHandler(async (req, res, next) => {
   const { validateQueryForNewRequest } = require("../utils/helperFunctions");
-  const query = req.query;
 
-  validateQueryForNewRequest(res, query);
+  let data;
+  if (Object.keys(req.query).length > 0) {
+    data = req.query;
+  } else {
+    data = req.body;
+  }
+
+  validateQueryForNewRequest(res, data);
 
   const request = new Request({
-    userId: query.userId,
-    sitterId: query.sitterId,
-    start: query.start,
-    end: query.end,
-    accepted: query.accepted,
-    declined: query.declined,
-    paid: query.paid,
+    userId: data.userId,
+    sitterId: data.sitterId,
+    start: data.start,
+    end: data.end,
+    accepted: data.accepted,
+    declined: data.declined,
+    paid: data.paid,
     address: {
-      houseNumber: query.address.houseNumber,
-      street: query.address.street,
-      district: query.address.district,
-      city: query.address.city,
-      county: query.address.county,
-      postalCode: query.address.postalCode,
-      country: query.address.country,
+      houseNumber: data.address.houseNumber,
+      street: data.address.street,
+      district: data.address.district,
+      city: data.address.city,
+      county: data.address.county,
+      postalCode: data.address.postalCode,
+      country: data.address.country,
     },
   });
 
