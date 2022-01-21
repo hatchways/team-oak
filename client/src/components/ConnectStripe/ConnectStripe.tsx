@@ -14,7 +14,6 @@ export const ConnectStripe: React.FC<StripeProps> = ({ header }) => {
 
   const clickHandler = async () => {
     await getLink().then((data: StripeLink) => {
-      console.log(data);
       if (data.success) {
         window.location.href = data.success.accountLink.url;
       }
