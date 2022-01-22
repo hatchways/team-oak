@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
-
-function calculatePayment(hoursOfService, rate) {
+const calculatePayment = function (hoursOfService, rate) {
   total = hoursOfService * rate;
   totalPayment = total + (total * 5) / 100;
   return totalPayment;
-}
+};
 
-exports.paymentSchema = new mongoose.Schema({
+const paymentSchema = new mongoose.Schema({
   sitterId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -34,3 +33,5 @@ exports.paymentSchema = new mongoose.Schema({
     default: "",
   },
 });
+
+module.exports = Payment = mongoose.model("Payment", paymentSchema);
