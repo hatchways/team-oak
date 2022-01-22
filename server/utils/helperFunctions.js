@@ -1,15 +1,3 @@
-/*
- * Contents
- * Public:
- *  - checkQueryForEmptyFields()
- *  - updateRequest()
- *  - validateQuery()
- * Private:
- *  - updateRequestField()
- *  - isObjectIdValid()
- *  - isArrayBoolean()
- */
-
 const ObjectId = require("mongoose").Types.ObjectId;
 
 /**
@@ -34,7 +22,7 @@ module.exports.checkQueryForEmptyFields = function checkQueryForEmptyFields(
 };
 
 /**
- * Update specified fields of Mongoose request object with values from req.query.
+ * Update specified fields of Mongoose request object with values from req.params.
  * @param {Object} request - Mongoose request object
  * @param {Array<String>} fieldsToChange - Array of fields to update
  * @param {Object} req - Express request object
@@ -46,8 +34,8 @@ module.exports.updateRequest = function updateRequest(
   req
 ) {
   for (const field of fieldsToChange) {
-    if (isArrayBoolean(req.query[field])) {
-      request.field = updateRequestField(request, field, req.query[field]);
+    if (isArrayBoolean(req.params[field])) {
+      request.field = updateRequestField(request, field, req.params[field]);
     } else {
       throw new Error(`Field '${field}' is not boolean`);
     }
@@ -64,47 +52,6 @@ module.exports.updateRequest = function updateRequest(
     }
 
     return requestObject;
-  }
-};
-
-/**
- * Provides extra validation for creation of a new Request object to be placed
- * in the database.
- * @param {Object} res - Express res object to forward errors
- * @param {Request} query - Express req.query Request object
- * @returns {void}
- */
-module.exports.validateQueryForNewRequest = function validateQuery(res, query) {
-  if (!isObjectIdValid(query.userId)) {
-    res.status(400);
-    throw new Error("Invalid userId");
-  }
-
-  if (!isObjectIdValid(query.sitterId)) {
-    res.status(400);
-    throw new Error("Invalid sitterId");
-  }
-
-  if (query.userId === query.sitterId) {
-    res.status(400);
-    throw new Error("userId and sitterId cannot be identical");
-  }
-
-  if (new Date(query.start) > new Date(query.end)) {
-    res.status(400);
-    throw new Error("Start date cannot be after end date");
-  }
-
-  if (new Date(query.start) < new Date(Date.now())) {
-    res.status(400);
-    throw new Error("Start date cannot be in the past");
-  }
-
-  if (!isArrayBoolean(query.accepted, query.declined, query.paid)) {
-    res.status(400);
-    throw new Error(
-      "Required parameters 'accepted', 'declined', and 'paid' must be boolean values"
-    );
   }
 };
 

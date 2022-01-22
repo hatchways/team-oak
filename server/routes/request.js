@@ -1,16 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const protect = require("../middleware/auth");
+const { validateRequest } = require("../validate");
 const {
   loadRequests,
   newRequest,
   updateRequest,
 } = require("../controllers/request");
 
-router.route("/load").get(protect, loadRequests);
+router.route("/").get(protect, loadRequests);
 
-router.route("/new").post(newRequest);
+router.route("/").post(protect, validateRequest, newRequest);
 
-router.route("/update").patch(protect, updateRequest);
+router.route("/:requestId").patch(protect, updateRequest);
 
 module.exports = router;

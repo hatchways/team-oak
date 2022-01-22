@@ -3,39 +3,34 @@ const asyncHandler = require("express-async-handler");
 const {
   updateRequest,
   checkQueryForEmptyFields,
-  validateQueryForNewRequest,
 } = require("../utils/helperFunctions");
 
-// @route GET /request/load
+// @route GET /requests
 // @desc Get list of requests for logged-in user
 // @access Private
 exports.loadRequests = asyncHandler(async (req, res, next) => {
-  const uid = req.user.id;
-  let requests;
-
-  if (uid) {
-    requests = await Request.find({
-      userId: uid,
-    });
-  }
+  const requests = await Request.find({
+    userId: req.user.id,
+  });
 
   res.status(200).json(requests);
 });
 
-// @route POST /request/new
+// @route POST /requests
 // @desc Create a new request
-// @access Public
+// @access Private
 exports.newRequest = asyncHandler(async (req, res, next) => {
-  const { validateQueryForNewRequest } = require("../utils/helperFunctions");
-
-  let data;
-  if (Object.keys(req.query).length > 0) {
-    data = req.query;
-  } else {
-    data = req.body;
+  if (
+    Object.keys(req.body).length === 0 &&
+    Object.keys(req.query).length !== 0
+  ) {
+    res.status(400).json({
+      status: "POST to /routes failed",
+      message: "Request cannot be made in query parameters",
+    });
   }
 
-  validateQueryForNewRequest(res, data);
+  const data = req.body;
 
   const request = new Request({
     userId: data.userId,
@@ -56,18 +51,16 @@ exports.newRequest = asyncHandler(async (req, res, next) => {
     },
   });
 
-  if (!(await request.save())) {
-    res.status(500).send("There was an error saving your request");
-  }
+  await request.save();
 
-  res.status(200).send("Successfully saved request!");
+  res.status(200).json(request);
 });
 
-// @route PATCH /request/update
+// @route PATCH /requests/:requestId
 // @desc Update request with approved or declined
 // @access Private
 exports.updateRequest = asyncHandler(async (req, res, next) => {
-  const requestId = req.query.requestId;
+  const requestId = req.params.requestId;
 
   const fieldsToChange = checkQueryForEmptyFields(
     req,
@@ -86,10 +79,7 @@ exports.updateRequest = asyncHandler(async (req, res, next) => {
   }
 
   request = updateRequest(request, fieldsToChange, req);
+  await request.save();
 
-  if (!(await request.save())) {
-    res.status(500).send("There was an error saving your updated request");
-  }
-
-  res.status(200).send("Successfully updated request!");
+  res.status(200).json(request);
 });

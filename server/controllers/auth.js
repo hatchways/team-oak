@@ -2,7 +2,6 @@ const User = require("../models/User");
 const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
-const dotenv = require("dotenv").config({ path: __dirname + "/./../.env" });
 const loginHelper = require("../helpers/loginHelper");
 
 // @route POST /auth/register
