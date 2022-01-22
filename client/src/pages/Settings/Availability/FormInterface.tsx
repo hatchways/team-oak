@@ -68,14 +68,11 @@ const GenerateFormInterface: React.FC<GenerateFormInterface> = ({ day }) => {
             onChange={(e) => {
               if (checked) {
                 setFrom(e.target.value);
-                console.log('yep it is checked');
               }
               if (checked && e.target.value == '23') {
                 setTo('0');
-                console.log('yep program also thinks to should be midnight');
               } else if (parseInt(e.target.value) >= parseInt(to)) {
                 setTo((parseInt(e.target.value) + 1).toString());
-                console.log('whoa program did some weird math here');
               }
             }}
             sx={{ marginTop: 'auto', marginBottom: 'auto', width: '100px', height: '30px' }}
