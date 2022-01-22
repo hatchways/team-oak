@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import { useAuth } from '../../context/useAuthContext';
+import { useSnackBar } from '../../context/useSnackbarContext';
 import SettingHeader from '../../components/SettingsHeader/SettingsHeader';
 import { Box } from '@mui/material';
 import getLink from './../../helpers/APICalls/stripe';
@@ -11,11 +12,14 @@ interface StripeProps {
 
 export const ConnectStripe: React.FC<StripeProps> = ({ header }) => {
   const { profile } = useAuth();
+  const { updateSnackBarMessage } = useSnackBar();
 
   const clickHandler = async () => {
     await getLink().then((data: StripeLink) => {
       if (data.success) {
         window.location.href = data.success.accountLink.url;
+      } else if (data.error) {
+        updateSnackBarMessage('An error occured while connecting Stripe');
       }
     });
   };
