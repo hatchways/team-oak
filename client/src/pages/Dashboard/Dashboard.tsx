@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
-import { CircularProgress, Grid, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import PageContainer from '../../components/PageContainer/PageContainer';
+import ProfileListings from '../../components/ProfileListings/ProfileListings';
 
 export default function Dashboard(): JSX.Element {
   const { loggedInUser } = useAuth();
@@ -28,6 +29,10 @@ export default function Dashboard(): JSX.Element {
           <Typography sx={{ textAlign: 'center' }} variant="h4">
             Search Profiles
           </Typography>
+
+          <Box sx={{ marginTop: 3 }}>
+            <ProfileListings />
+          </Box>
         </Grid>
       </Grid>
     </PageContainer>
