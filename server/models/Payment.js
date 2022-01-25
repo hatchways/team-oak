@@ -1,37 +1,41 @@
 const mongoose = require("mongoose");
-const calculatePayment = function (hoursOfService, rate) {
-  total = hoursOfService * rate;
-  totalPayment = total + (total * 5) / 100;
-  return totalPayment;
-};
 
-const paymentSchema = new mongoose.Schema({
-  sitterId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
+const structures = { toJSON: { virtuals: true } };
+
+const paymentSchema = new mongoose.Schema(
+  {
+    sitterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    rate: {
+      type: Number,
+      required: true,
+    },
+    hoursOfService: {
+      type: Number,
+      required: true,
+    },
+    customerId: {
+      type: String,
+      required: true,
+    },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
   },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
-  rate: {
-    type: String,
-    default: "CAD",
-  },
-  hoursOfService: {
-    type: Number,
-    default: "",
-  },
-  totalPayment: {
-    type: Number,
-    default: calculatePayment(hoursOfService, rate),
-  },
-  customerId: {
-    type: String,
-    default: "",
-  },
+  structures
+);
+
+paymentSchema.virtual("totalPayment").get(function () {
+  return this.hoursOfService * this.rate + 5;
 });
 
 module.exports = Payment = mongoose.model("Payment", paymentSchema);
