@@ -12,6 +12,8 @@
     "@mui/lab": "^5.0.0-alpha.55",
     "@mui/material": "^5.1.1",
     "@mui/styles": "^5.1.1",
+    "@stripe/react-stripe-js": "github:stripe/react-stripe-js",
+    "@stripe/stripe-js": "github:stripe/stripe-js",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
