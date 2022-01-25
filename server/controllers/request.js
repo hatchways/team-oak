@@ -2,7 +2,7 @@ const Request = require("../models/Request");
 const asyncHandler = require("express-async-handler");
 const {
   updateRequest,
-  checkQueryForEmptyFields,
+  checkBodyForEmptyFields,
 } = require("../utils/helperFunctions");
 
 // @route GET /requests
@@ -62,7 +62,7 @@ exports.newRequest = asyncHandler(async (req, res, next) => {
 exports.updateRequest = asyncHandler(async (req, res, next) => {
   const requestId = req.params.requestId;
 
-  const fieldsToChange = checkQueryForEmptyFields(
+  const fieldsToChange = checkBodyForEmptyFields(
     req,
     "accepted",
     "declined",

@@ -6,14 +6,14 @@ const ObjectId = require("mongoose").Types.ObjectId;
  * @param {String} fieldsToCheck - Comma separated keys from req to check
  * @returns {Array} Array of fields that were checked
  */
-module.exports.checkQueryForEmptyFields = function checkQueryForEmptyFields(
+module.exports.checkBodyForEmptyFields = function checkQueryForEmptyFields(
   req,
   ...fieldsToCheck
 ) {
   const fieldsToChange = [];
 
   for (const field of fieldsToCheck) {
-    if (typeof req.query[field] !== "undefined") {
+    if (typeof req.body[field] !== "undefined") {
       fieldsToChange.push(field);
     }
   }
@@ -34,8 +34,8 @@ module.exports.updateRequest = function updateRequest(
   req
 ) {
   for (const field of fieldsToChange) {
-    if (isArrayBoolean(req.params[field])) {
-      request.field = updateRequestField(request, field, req.params[field]);
+    if (isArrayBoolean(req.body[field])) {
+      request[field] = updateRequestField(request, field, req.body[field]);
     } else {
       throw new Error(`Field '${field}' is not boolean`);
     }
