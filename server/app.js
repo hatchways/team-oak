@@ -11,8 +11,9 @@ const logger = require("morgan");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
-const profileRouter = require('./routes/profile');
-const stripeRouter = require('./routes/stripe');
+const profileRouter = require("./routes/profile");
+const stripeRouter = require("./routes/stripe");
+const paymentRouter = require("./routes/payment");
 
 const { json, urlencoded } = express;
 
@@ -47,6 +48,7 @@ app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
 app.use("/connect", stripeRouter);
+app.use("/payments", paymentRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
