@@ -47,7 +47,7 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
     schedule = await Schedule.findById(req.params.scheduleId)
     schedule.name = name;
     schedule.periods = newPeriods;
-    schedule.save()
+    await schedule.save()
 
     res.status(201).json({
       success: {
