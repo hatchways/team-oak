@@ -11,8 +11,9 @@ const logger = require("morgan");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
-const profileRouter = require('./routes/profile');
-const uploadImageRouter = require('./routes/uploadImage');
+const uploadImageRouter = require("./routes/uploadImage");
+const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/request");
 const stripeRouter = require('./routes/stripe');
 
 const { json, urlencoded } = express;
@@ -48,6 +49,7 @@ app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
 app.use("/uploadImage", uploadImageRouter);
+app.use("/requests", requestRouter);
 app.use("/connect", stripeRouter);
 
 if (process.env.NODE_ENV === "production") {
