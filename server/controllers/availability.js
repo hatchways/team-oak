@@ -1,7 +1,6 @@
 const PetSitter = require("../models/PetSitter")
 const Schedule = require("../models/Schedule");
 const asyncHandler = require("express-async-handler");
-const generateToken = require("../utils/generateToken");
 const Availability = require("../models/Availability");
 
 // @route POST /availability/schedule/:scheduleId
