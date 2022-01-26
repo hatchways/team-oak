@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Grid, Box, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import { Grid, Box, Typography, Card, CardMedia, CardContent, CircularProgress } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import useStyles from './useStyles';
 import BookingForm from './BookingForm/BookingForm';
@@ -24,6 +24,7 @@ interface RouterProps {
 const ProfileDetail: React.FC<RouteComponentProps<RouterProps>> = ({ match }) => {
   const classes = useStyles();
 
+  const [loading, setLoading] = useState<boolean>(false);
   const [profile, setProfile] = useState<IProfile>({
     name: '',
     photo: '',
@@ -37,14 +38,24 @@ const ProfileDetail: React.FC<RouteComponentProps<RouterProps>> = ({ match }) =>
   });
 
   const getProfile = useCallback(async () => {
-    const userId = match.params.userId;
-    const response = await getProfileFromId(userId);
-    setProfile(response);
+    setLoading(true);
+    try {
+      const userId = match.params.userId;
+      const response = await getProfileFromId(userId);
+      setProfile(response);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   }, [match.params.userId]);
 
   useEffect(() => {
     getProfile();
   }, [getProfile]);
+
+  if (loading) {
+    return <CircularProgress sx={{ position: 'absolute', top: '50%', left: '50%' }} />;
+  }
 
   return (
     <Grid container className={classes.rootContainer}>
