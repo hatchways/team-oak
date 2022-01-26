@@ -6,10 +6,6 @@ const scheduleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  active: {
-    type: Boolean,
-    required: true,
-  },
   periods: {
     monday: {
       startTime: {

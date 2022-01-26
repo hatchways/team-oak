@@ -35,10 +35,6 @@ const profileSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    stripeAccountId: {
-      type: String,
-      default: "",
-    },
   },
   { discriminatorKey: "type" }
 );
