@@ -1,28 +1,18 @@
 import { useState } from 'react';
 import useStyles from './useStyles';
-import {
-  CardContent,
-  Box,
-  Typography,
-  Select,
-  MenuItem,
-  OutlinedInput,
-  Grid,
-  Button,
-  Card,
-  Rating,
-} from '@mui/material';
+import { CardContent, Box, Typography, Grid, Button, Card, Rating } from '@mui/material';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useFormik } from 'formik';
 
-const bookDetail = {
-  rate: 14,
-};
+interface Props {
+  rate: number;
+  rating: number;
+}
 
-const BookingForm = (): JSX.Element => {
+const BookingForm = ({ rate, rating }: Props): JSX.Element => {
   const classes = useStyles();
 
   const bookForm = useFormik({
@@ -47,9 +37,9 @@ const BookingForm = (): JSX.Element => {
       <CardContent>
         <form onSubmit={bookForm.handleSubmit} className={classes.bookingForm}>
           <Typography variant="h4" className={classes.userRateText}>
-            {bookDetail.rate}/hr
+            {rate}/hr
           </Typography>
-          <Rating defaultValue={4.5} precision={0.5} readOnly />
+          <Rating defaultValue={0} value={rating} precision={0.5} readOnly />
           <Box className={classes.profileDetailsForm}>
             <Grid className={classes.profileDetailsFormContainer}>
               <Typography variant="h6" className={classes.profileDetailsLabel}>

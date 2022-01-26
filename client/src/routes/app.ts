@@ -3,6 +3,7 @@ import Signup from '../pages/SignUp/SignUp';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Settings from '../pages/Settings/Settings';
 import LandingPage from '../pages/LandingPage/LandingPage';
+import ProfileDetail from '../pages/ProfileDetail/ProfileDetail';
 import { AccountType } from '../types/AccountType';
 
 export interface AppRouteType {
@@ -40,6 +41,12 @@ export const appRoutes: AppRouteType[] = [
   {
     to: '/profile/settings',
     component: Settings,
+    canView: [AccountType.PET_OWNER, AccountType.PET_SITTER],
+    exact: false,
+  },
+  {
+    to: '/profile/:userId',
+    component: ProfileDetail,
     canView: [AccountType.PET_OWNER, AccountType.PET_SITTER],
     exact: false,
   },
