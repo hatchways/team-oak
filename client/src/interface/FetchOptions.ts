@@ -6,3 +6,12 @@ export interface FetchOptions {
   body?: string;
   credentials: RequestCredentials;
 }
+
+export interface PhotoUpload {
+  method: string;
+  headers?: {
+    'Content-Type': string;
+  };
+  body?: FormData;
+  credentials: RequestCredentials;
+}
