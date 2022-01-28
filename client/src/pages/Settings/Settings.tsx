@@ -9,6 +9,7 @@ import EditProfile from './EditProfile/EditProfile';
 import SettingHeader from '../../components/SettingsHeader/SettingsHeader';
 import ProfilePhoto from './ProfilePhoto/ProfilePhoto';
 import Availability from './Availability/Availability';
+import { ConnectStripe } from '../../components/ConnectStripe/ConnectStripe';
 
 const settingsMenu = [
   {
@@ -30,6 +31,11 @@ const settingsMenu = [
     name: 'Payment methods',
     to: '/profile/settings/payment-methods',
     component: <SettingHeader header="Payment Methods" />,
+  },
+  {
+    name: 'Billing',
+    to: '/profile/settings/billing',
+    component: <ConnectStripe header="Billing" />,
   },
 ];
 

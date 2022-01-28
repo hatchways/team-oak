@@ -14,12 +14,23 @@ This is a little description about your project.
 
 ---
 
+### Tests
+
+#### Server Tests
+
+1. Go into the server directory `cd server`
+2. Execute tests
+   1. Standard `npm test`
+   2. Coverage `npm run coverage`
+
+---
+
 ## Server
 
 1. Go into the server directory `cd server`
 2. Run `npm install` to install packages
 3. Create your environment variable (.env) file
-4. Run `npm run seeds` to create the demo user account and profile 
+4. Run `npm run seeds` to create the demo user account and profile
 5. Run `npm run dev` to start the server
 
 ---
