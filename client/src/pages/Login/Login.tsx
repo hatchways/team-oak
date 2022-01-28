@@ -8,6 +8,7 @@ import AuthPageWrapper from '../../components/AuthPageWrapper/AuthPageWrapper';
 import AuthPageFooter from '../../components/AuthPageFooter/AuthPageFooter';
 import DemoButton from '../../components/DemoButton/DemoButton';
 import demo from '../../helpers/APICalls/demo';
+import { Grid } from '@mui/material';
 
 export default function Login(): JSX.Element {
   const { updateLoginContext } = useAuth();
@@ -43,11 +44,15 @@ export default function Login(): JSX.Element {
 
   return (
     <PageContainer>
-      <AuthPageWrapper header="Log in">
-        <LoginForm handleSubmit={handleSubmit} />
-        <DemoButton handleClick={demoLogin}></DemoButton>
-        <AuthPageFooter text="Not a member?" anchorText="Sign up" anchorTo="/signup" />
-      </AuthPageWrapper>
+      <Grid container>
+        <Grid xs={12} item>
+          <AuthPageWrapper header="Log in">
+            <LoginForm handleSubmit={handleSubmit} />
+            <DemoButton handleClick={demoLogin}></DemoButton>
+            <AuthPageFooter text="Not a member?" anchorText="Sign up" anchorTo="/signup" />
+          </AuthPageWrapper>
+        </Grid>
+      </Grid>
     </PageContainer>
   );
 }

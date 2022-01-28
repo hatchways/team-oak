@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: 'clamp(100px, 100%, 100%)', // width: 100% - Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   label: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   submit: {
     margin: theme.spacing(3, 2, 2),
     padding: 10,
-    width: 160,
+    width: 'clamp(100px, 50%, 160px)',
     height: 56,
     borderRadius: theme.shape.borderRadius,
     marginTop: 49,
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   demo: {
     margin: theme.spacing(3, 2, 2),
     padding: 10,
-    width: 160,
+    width: 'clamp(100px, 60%, 160px)',
     height: 56,
     borderRadius: theme.shape.borderRadius,
     marginTop: 49,

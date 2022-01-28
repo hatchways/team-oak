@@ -132,7 +132,8 @@ const MenuItems = () => {
     <Grid
       container
       direction={{ xs: 'column', sm: 'row' }}
-      alignItems={{ xs: 'flex-start', sm: 'center' }}
+      alignItems={{ xs: 'center', sm: 'center' }}
+      width={{ xs: '100%' }}
       gap={{ xs: 4, sm: 2 }}
       justifyContent="flex-end"
       ref={menuRef}

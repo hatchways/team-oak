@@ -25,7 +25,6 @@ const AuthPageWrapper: React.FC<AuthPageWrapperProps> = ({ header, children }) =
       <AuthPageHeader header={header} />
       <Box
         sx={{
-          width: 350,
           margin: '0 auto',
         }}
       >
