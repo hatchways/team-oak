@@ -8,7 +8,7 @@ import GenerateFormInterface from './FormInterface';
 import { Formik, FormikHelpers, Field, validateYupSchema } from 'formik';
 import React, { useState } from 'react';
 
-const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const week = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 const generateSchedules = (scheduleName: string): JSX.Element => {
   return (
@@ -24,27 +24,41 @@ interface AvailabilityProps {
 
 interface Values {
   scheduleSelect: string;
-  MondayCheckbox: boolean;
-  TuesdayCheckbox: boolean;
-  WednesdayCheckbox: boolean;
-  ThursdayCheckbox: boolean;
-  FridayCheckbox: boolean;
-  SaturdayCheckbox: boolean;
-  SundayCheckbox: boolean;
-  MondayFrom: string;
-  TuesdayFrom: string;
-  WednesdayFrom: string;
-  ThursdayFrom: string;
-  FridayFrom: string;
-  SaturdayFrom: string;
-  SundayFrom: string;
-  MondayTo: string;
-  TuesdayTo: string;
-  WednesdayTo: string;
-  ThursdayTo: string;
-  FridayTo: string;
-  SaturdayTo: string;
-  SundayTo: string;
+  monday: {
+    active: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  tuesday: {
+    active: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  wednesday: {
+    active: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  thursday: {
+    active: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  friday: {
+    active: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  saturday: {
+    active: boolean;
+    startTime: string;
+    endTime: string;
+  };
+  sunday: {
+    active: boolean;
+    startTime: string;
+    endTime: string;
+  };
 }
 
 const Availability: React.FC<AvailabilityProps> = ({ header }) => {
@@ -56,27 +70,41 @@ const Availability: React.FC<AvailabilityProps> = ({ header }) => {
       <Formik
         initialValues={{
           scheduleSelect: schedules[0],
-          MondayCheckbox: true,
-          TuesdayCheckbox: true,
-          WednesdayCheckbox: true,
-          ThursdayCheckbox: true,
-          FridayCheckbox: true,
-          SaturdayCheckbox: true,
-          SundayCheckbox: true,
-          MondayFrom: '10',
-          TuesdayFrom: '10',
-          WednesdayFrom: '10',
-          ThursdayFrom: '10',
-          FridayFrom: '10',
-          SaturdayFrom: '10',
-          SundayFrom: '10',
-          MondayTo: '22',
-          TuesdayTo: '22',
-          WednesdayTo: '22',
-          ThursdayTo: '22',
-          FridayTo: '22',
-          SaturdayTo: '22',
-          SundayTo: '22',
+          monday: {
+            active: true,
+            startTime: '10',
+            endTime: '22',
+          },
+          tuesday: {
+            active: true,
+            startTime: '10',
+            endTime: '22',
+          },
+          wednesday: {
+            active: true,
+            startTime: '10',
+            endTime: '22',
+          },
+          thursday: {
+            active: true,
+            startTime: '10',
+            endTime: '22',
+          },
+          friday: {
+            active: true,
+            startTime: '10',
+            endTime: '22',
+          },
+          saturday: {
+            active: true,
+            startTime: '10',
+            endTime: '22',
+          },
+          sunday: {
+            active: true,
+            startTime: '10',
+            endTime: '22',
+          },
         }}
         onSubmit={(values: Values, { setSubmitting }: FormikHelpers<Values>) => {
           setTimeout(() => {

@@ -24,25 +24,25 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
       height: '4.5rem',
       display: 'flex',
       borderBottom: '1px solid #dbdbdb',
-      opacity: values[`${day}Checkbox`] ? 1 : 0.4,
+      opacity: values[day].active ? 1 : 0.4,
     }}
   >
     <FormGroup sx={{ marginTop: 'auto', marginBottom: 'auto', width: '25%' }}>
       <FormControlLabel
         control={
           <Field
-            id={`${day}Checkbox`}
-            name={`${day}Checkbox`}
-            checked={values[`${day}Checkbox`]}
+            id={`${day}.active`}
+            name={`${day}.active`}
+            checked={values[day].active}
             onChange={(e: any) => {
               if (!e.target.checked) {
-                setFieldValue(`${day}From`, '0');
-                setFieldValue(`${day}To`, '0');
+                setFieldValue(`${day}.startTime`, '0');
+                setFieldValue(`${day}.endTime`, '0');
               } else {
-                setFieldValue(`${day}From`, '10');
-                setFieldValue(`${day}To`, '22');
+                setFieldValue(`${day}.startTime`, '10');
+                setFieldValue(`${day}.endTime`, '22');
               }
-              setFieldValue(`${day}Checkbox`, e.target.checked);
+              setFieldValue(`${day}.active`, e.target.checked);
               handleSubmit();
             }}
             sx={{ marginLeft: '1.5rem' }}
@@ -50,7 +50,7 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
             component={Checkbox}
           />
         }
-        label={<Typography sx={{ fontSize: '15px', fontWeight: 500 }}>{day}</Typography>}
+        label={<Typography sx={{ fontSize: '15px', fontWeight: 500, textTransform: 'capitalize' }}>{day}</Typography>}
         sx={{ fontSize: '25px', fontWeight: 700 }}
       />
     </FormGroup>
@@ -59,18 +59,18 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
       labelPlacement="start"
       control={
         <Field
-          id={`${day}From`}
-          name={`${day}From`}
+          id={`${day}.startTime`}
+          name={`${day}.startTime`}
           type="time"
           onChange={(e: any) => {
-            if (values[`${day}Checkbox`]) {
+            if (values[day].active) {
               const val = e.target.value;
               if (val == '23') {
-                setFieldValue(`${day}To`, '0');
-              } else if (val >= parseInt(values[`${day}To`])) {
-                setFieldValue(`${day}To`, (parseInt(val) + 1).toString());
+                setFieldValue(`${day}.endTime`, '0');
+              } else if (val >= parseInt(values[day].endTime)) {
+                setFieldValue(`${day}.endTime`, (parseInt(val) + 1).toString());
               }
-              setFieldValue(`${day}From`, val);
+              setFieldValue(`${day}.startTime`, val);
               handleSubmit();
             }
           }}
@@ -105,18 +105,18 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
       labelPlacement="start"
       control={
         <Field
-          id={`${day}To`}
-          name={`${day}To`}
+          id={`${day}.endTime`}
+          name={`${day}.endTime`}
           type="time"
           onChange={(e: any) => {
-            if (values[`${day}Checkbox`]) {
+            if (values[day].active) {
               const val = e.target.value;
               if (val == '0') {
-                setFieldValue(`${day}From`, '23');
-              } else if (val <= parseInt(values[`${day}From`])) {
-                setFieldValue(`${day}From`, (parseInt(val) - 1).toString());
+                setFieldValue(`${day}.startTime`, '23');
+              } else if (val <= parseInt(values[day].startTime)) {
+                setFieldValue(`${day}.startTime`, (parseInt(val) - 1).toString());
               }
-              setFieldValue(`${day}To`, val);
+              setFieldValue(`${day}.endTime`, val);
               handleSubmit();
             }
           }}
