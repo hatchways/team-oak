@@ -1,10 +1,18 @@
 const mongoose = require("mongoose");
 
 const notificationsSchema = new mongoose.Schema({
-  userId: {
+  senderId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'User',
+    ref: "User",
+  },
+  senderPhoto: {
+    type: String,
+  },
+  receiverId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
   },
   title: {
     type: String,
@@ -13,6 +21,7 @@ const notificationsSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
+    enum: ["app", "booking", "user"],
   },
   description: {
     type: String,
@@ -20,12 +29,12 @@ const notificationsSchema = new mongoose.Schema({
   },
   read: {
     type: Boolean,
-    required: true,
+    default: false,
   },
   date: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = Notifications = mongoose.model("Notifications", notificationsSchema);

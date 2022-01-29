@@ -1,16 +1,30 @@
 const Notification = require("../models/Notifications");
+const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
+
+const getSenderPhoto = asyncHandler(async (id) => {
+  const senderProfile = await Profile.findOne({ userId: id });
+  if (senderProfile) {
+    return senderProfile.photo;
+  } else {
+    return "";
+  }
+});
 
 // @route POST /notification/create
 // @desc create new notification
 // @access Private
 exports.createNotification = asyncHandler(async (req, res, next) => {
-  const { title, type, description, read, date } = req.body;
+  const { receiverId, title, type, description, read, date } = req.body;
 
-  const userId = req.user.id;
+  const senderId = req.user.id;
+
+  const senderPhoto = await getSenderPhoto(senderId);
 
   const notification = await Notification.create({
-    userId,
+    senderId,
+    senderPhoto,
+    receiverId,
     title,
     type,
     description,
@@ -19,16 +33,24 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
   });
 
   if (notification) {
+    const io = req.app.get("socketio");
+    io.emit("newNotification");
+
     res.status(201).json({
-      success: {
-        notification: {
-          id: notification.userId,
-          title: notification.title,
-          type: notification.type,
-          description: notification.description,
-          read: notification.read,
-          date: notification.date,
-        },
+      data: {
+        notifications: [
+          {
+            id: notification._id,
+            senderId: notification.senderId,
+            receiverId: notification.receiverId,
+            photo: notification.senderPhoto,
+            title: notification.title,
+            type: notification.type,
+            description: notification.description,
+            read: notification.read,
+            date: notification.date,
+          },
+        ],
       },
     });
   } else {
@@ -50,7 +72,7 @@ exports.markNotificationAsRead = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({
-    success: {
+    data: {
       notifications: notification,
     },
   });
@@ -68,7 +90,7 @@ exports.getAllNotifications = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({
-    success: {
+    data: {
       notifications: notifications,
     },
   });
@@ -86,7 +108,7 @@ exports.getUnreadNotifications = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({
-    success: {
+    data: {
       notifications: notifications,
     },
   });
