@@ -16,9 +16,11 @@ import getUnreadNotifications from '../../../helpers/APICalls/getUnreadNotificat
 import { Notification as INotification } from '../../../interface/Notification';
 import markNotificationAsRead from '../../../helpers/APICalls/markNotificationAsRead';
 
-const Notification: React.FC<{ notif: INotification }> = ({ notif }) => {
+const Notification: React.FC<{
+  notif: INotification;
+  handleClose: () => void;
+}> = ({ notif, handleClose }) => {
   const classes = useStyles();
-  const handleClose = () => null;
 
   const date = new Date(notif.date);
   const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
@@ -110,7 +112,7 @@ const Notifications = (): JSX.Element => {
         classes={{ paper: classes.menu }}
       >
         {notifs.length > 0 ? (
-          notifs.map((notif: INotification) => <Notification key={notif._id} notif={notif} />)
+          notifs.map((notif: INotification) => <Notification key={notif._id} notif={notif} handleClose={handleClose} />)
         ) : (
           <Typography sx={{ textAlign: 'center', fontWeight: 'bold' }}>No new notifications</Typography>
         )}
