@@ -4,8 +4,8 @@ import { makeStyles } from '@mui/styles';
 export const useStyles = makeStyles((theme: Theme) => ({
   notification: {
     position: 'absolute',
-    top: '12px',
-    right: '5px',
+    top: '3px',
+    right: '-4px',
     backgroundColor: '#1FC413',
     width: 6,
     height: 6,
