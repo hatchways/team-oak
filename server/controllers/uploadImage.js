@@ -19,7 +19,7 @@ exports.uploadImage = asyncHandler(async (req, res, next) => {
       },
     });
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   }
 });
@@ -46,7 +46,7 @@ exports.uploadImages = asyncHandler(async (req, res, next) => {
       },
     });
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   }
 });
