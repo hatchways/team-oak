@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Profile = require("../models/Profile");
+const PetSitter = require("../models/PetSitter");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 const loginHelper = require("../helpers/loginHelper");
@@ -11,6 +12,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const emailExists = await User.findOne({ email });
+
+  const isPetSitter = req.query.accountType === "petSitter" ? true : false;
 
   if (emailExists) {
     res.status(400);
@@ -31,10 +34,17 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   });
 
   if (user) {
-    await Profile.create({
-      userId: user._id,
-      name,
-    });
+    if (isPetSitter) {
+      await PetSitter.create({
+        userId: user._id,
+        name,
+      });
+    } else {
+      await Profile.create({
+        userId: user._id,
+        name,
+      });
+    }
 
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
