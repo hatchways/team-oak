@@ -48,7 +48,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       success: {
         user: {
           id: user._id,
-          name: user.name,
           email: user.email,
         },
       },
@@ -92,7 +91,6 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
     success: {
       user: {
         id: user._id,
-        name: user.name,
         email: user.email,
       },
       profile,
