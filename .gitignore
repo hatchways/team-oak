@@ -23,7 +23,6 @@ yarn-error.log*
 
 #TODO add .env to your gitignore
 __snapshots__
-/server/.prettierrc
 server/.nyc_output/
 
 # debug & other vs code settings
