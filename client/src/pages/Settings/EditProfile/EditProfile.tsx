@@ -83,7 +83,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ header, currentUser, currentP
       <SettingHeader header={header} />
       <Formik
         initialValues={{
-          name: currentUser?.name || '',
+          name: currentProfile.name || '',
           email: currentUser?.email || '',
           gender: currentProfile.gender || 'none',
           birthday: currentProfile.birthday || new Date(),
