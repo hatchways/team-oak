@@ -1,73 +1,147 @@
-const PetSitter = require("../models/PetSitter")
+const PetSitter = require("../models/PetSitter");
 const Schedule = require("../models/Schedule");
 const asyncHandler = require("express-async-handler");
 const Availability = require("../models/Availability");
 
-// @route POST /availability/schedule/:scheduleId
-// @desc create or update a schedule
+// @route POST /availability/schedule/new
+// @desc create a schedule
 // @access Private
 exports.createSchedule = asyncHandler(async (req, res, next) => {
   const petsitter = await PetSitter.findOne(req.user);
   const availability = await Availability.findById(petsitter.availabilityId);
-  const scheduleIds = await availability.scheduleIds
-  const { name, MondayFrom, MondayTo, TuesdayFrom, TuesdayTo, WednesdayFrom, WednesdayTo, ThursdayFrom, ThursdayTo, FridayFrom, FridayTo, SaturdayFrom, SaturdayTo, SundayFrom, SundayTo } = req.body;
-  
-  const newPeriods = {
+  const {
+    name,
+    mondayFrom,
+    mondayTo,
+    tuesdayFrom,
+    tuesdayTo,
+    wednesdayFrom,
+    wednesdayTo,
+    thursdayFrom,
+    thursdayTo,
+    fridayFrom,
+    fridayTo,
+    saturdayFrom,
+    saturdayTo,
+    sundayFrom,
+    sundayTo,
+  } = req.body;
+
+  const Periods = {
     monday: {
-      startTime: MondayFrom,
-      endTime: MondayTo,
+      startTime: mondayFrom,
+      endTime: mondayTo,
     },
     tuesday: {
-      startTime: TuesdayFrom,
-      endTime: TuesdayTo,
+      startTime: tuesdayFrom,
+      endTime: tuesdayTo,
     },
     wednesday: {
-      startTime: WednesdayFrom,
-      endTime: WednesdayTo,
+      startTime: wednesdayFrom,
+      endTime: wednesdayTo,
     },
     thursday: {
-      startTime: ThursdayFrom,
-      endTime: ThursdayTo,
+      startTime: thursdayFrom,
+      endTime: thursdayTo,
     },
     friday: {
-      startTime: FridayFrom,
-      endTime: FridayTo,
+      startTime: fridayFrom,
+      endTime: fridayTo,
     },
     saturday: {
-      startTime: SaturdayFrom,
-      endTime: SaturdayTo,
+      startTime: saturdayFrom,
+      endTime: saturdayTo,
     },
     sunday: {
-      startTime: SundayTo,
-      endTime: SundayFrom,
+      startTime: sundayTo,
+      endTime: sundayFrom,
     },
   };
 
-  if (scheduleIds.includes(req.params.scheduleId)) {
-    schedule = await Schedule.findById(req.params.scheduleId)
+  const newSchedule = await Schedule.create({
+    name,
+    periods: Periods,
+  });
+
+  availability.scheduleIds.push(newSchedule._id);
+  await availability.save();
+
+  res.status(201).json({
+    success: {
+      newSchedule,
+    },
+  });
+});
+
+// @route PUT /availability/schedule/:scheduleId
+// @desc update a schedule
+// @access Private
+exports.updateSchedule = asyncHandler(async (req, res, next) => {
+  const petsitter = await PetSitter.findOne(req.user);
+  const availability = await Availability.findById(petsitter.availabilityId);
+  const {
+    name,
+    mondayFrom,
+    mondayTo,
+    tuesdayFrom,
+    tuesdayTo,
+    wednesdayFrom,
+    wednesdayTo,
+    thursdayFrom,
+    thursdayTo,
+    fridayFrom,
+    fridayTo,
+    saturdayFrom,
+    saturdayTo,
+    sundayFrom,
+    sundayTo,
+  } = req.body;
+
+  const newPeriods = {
+    monday: {
+      startTime: mondayFrom,
+      endTime: mondayTo,
+    },
+    tuesday: {
+      startTime: tuesdayFrom,
+      endTime: tuesdayTo,
+    },
+    wednesday: {
+      startTime: wednesdayFrom,
+      endTime: wednesdayTo,
+    },
+    thursday: {
+      startTime: thursdayFrom,
+      endTime: thursdayTo,
+    },
+    friday: {
+      startTime: fridayFrom,
+      endTime: fridayTo,
+    },
+    saturday: {
+      startTime: saturdayFrom,
+      endTime: saturdayTo,
+    },
+    sunday: {
+      startTime: sundayTo,
+      endTime: sundayFrom,
+    },
+  };
+
+  if (availability.scheduleIds.includes(req.params.scheduleId)) {
+    schedule = await Schedule.findById(req.params.scheduleId);
     schedule.name = name;
     schedule.periods = newPeriods;
-    await schedule.save()
+    await schedule.save();
 
     res.status(201).json({
       success: {
-        schedule
-      }
-    })
+        schedule,
+      },
+    });
   } else {
-      const newSchedule = await Schedule.create({
-        name,
-        periods: newPeriods
-      });
-
-      availability.scheduleIds.push(newSchedule._id)
-      await availability.save()
-  
-      res.status(201).json({
-        success: {
-          newSchedule
-        }
-      })
+    res.status(401);
+    throw new Error("cannot find the schedule you are trying to update");
   }
 });
 
@@ -76,64 +150,66 @@ exports.createSchedule = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.activeSchedule = asyncHandler(async (req, res, next) => {
   const petsitter = await PetSitter.findOne(req.user);
-  const availability = await Availability.findById(petsitter.availabilityId);
-  const activeScheduleId = await availability.activeScheduleId;
-  const activeSchedule = await Schedule.findById(activeScheduleId)
+  const schedule = await petsitter.populate({
+    path: "availabilityId",
+    populate: {
+      path: "activeScheduleId",
+    },
+  });
 
-  if (!activeSchedule) {
+  const output = schedule.availabilityId.activeScheduleId;
+
+  if (!output) {
     res.status(401);
     throw new Error("active schedule not found");
-  } 
+  }
   res.status(201).json({
     success: {
-      activeSchedule
-    }
-  })
-})
+      output,
+    },
+  });
+});
 
 // @route GET /availability/schedule
 // @desc get all schedules for current signed in petsitter
 // @access Private
-exports.getAllSchedules = asyncHandler(async (req, res, next) => {  
+exports.getAllSchedules = asyncHandler(async (req, res, next) => {
   const petsitter = await PetSitter.findOne(req.user);
-  const availability = await Availability.findById(petsitter.availabilityId);
-  const scheduleIds = await availability.scheduleIds;
-  const output = []
+  const schedules = await petsitter.populate({
+    path: "availabilityId",
+    populate: {
+      path: "scheduleIds",
+    },
+  });
 
-  for (const id of scheduleIds) {
-    const schedule = await Schedule.findById(id);
-    output.push(schedule)
-  };
+  output = schedules.availabilityId.scheduleIds;
 
   res.status(200).json({
     success: {
       output,
-    }
-  })
+    },
+  });
 });
 
-// @route POST /availability/schedule/:scheduleId/activate
+// @route PUT /availability/schedule/:scheduleId/activate
 // @desc set active schedule id for a petsitter
 // @access Private
 exports.activateSchedule = asyncHandler(async (req, res, next) => {
   const petsitter = await PetSitter.findOne(req.user);
-  const availability = await Availability.findById(petsitter.availabilityId)
-  const scheduleIds = await availability.scheduleIds
+  const availability = await Availability.findById(petsitter.availabilityId);
   const scheduleId = req.params.scheduleId;
-  
-  if (scheduleIds.includes(scheduleId)) {
+
+  if (availability.scheduleIds.includes(scheduleId)) {
     availability.activeScheduleId = scheduleId;
     await availability.save();
 
     res.status(200).json({
       success: {
-        'active schedule updated': scheduleId
-      }
-    })
+        "active schedule updated": scheduleId,
+      },
+    });
   } else {
     res.status(400);
     throw new Error("could not locate requested schedule id");
-  } 
-})
-
-
+  }
+});

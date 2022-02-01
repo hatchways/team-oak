@@ -4,17 +4,20 @@ const protect = require("../middleware/auth");
 const { validateSchedule } = require("../validate");
 const {
   createSchedule,
+  updateSchedule,
   activeSchedule,
   getAllSchedules,
   activateSchedule,
 } = require("../controllers/availability");
 
-router.route("/schedule/:scheduleId").post(protect, validateSchedule, createSchedule);
+router.route("/schedule/new").post(protect, validateSchedule, createSchedule);
+
+router.route("/schedule/:scheduleId").put(protect, validateSchedule, updateSchedule);
 
 router.route("/schedule/active").get(protect, activeSchedule);
 
 router.route("/schedule").get(protect, getAllSchedules);
 
-router.route("/schedule/:scheduleId/activate").post(protect, activateSchedule);
+router.route("/schedule/:scheduleId/activate").put(protect, activateSchedule);
 
 module.exports = router;
