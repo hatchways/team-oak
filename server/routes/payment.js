@@ -13,6 +13,6 @@ router.route("/").get(protect, getAllPayments);
 router.route("/:id").get(protect, getPayment);
 router.route("/:id/pay").put(protect, makePayment);
 router.route("/:id/cancel").put(protect, cancelPayment);
-router.route("/newPayment").post(protect, createPaymentIntent);
+router.route("/new").post(protect, createPaymentIntent);
 
 module.exports = router;
