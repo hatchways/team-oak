@@ -1,9 +1,9 @@
 const User = require("../models/User");
 const Profile = require("../models/Profile");
+const PetSitter = require("../models/PetSitter");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
-const dotenv = require('dotenv').config({path:__dirname+'/./../.env'})
-const loginHelper = require('../helpers/loginHelper');
+const loginHelper = require("../helpers/loginHelper");
 
 // @route POST /auth/register
 // @desc Register user
@@ -12,6 +12,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const emailExists = await User.findOne({ email });
+
+  const isPetSitter = req.query.accountType === "petSitter" ? true : false;
 
   if (emailExists) {
     res.status(400);
@@ -28,31 +30,37 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   const user = await User.create({
     name,
     email,
-    password
+    password,
   });
 
   if (user) {
-    await Profile.create({
-      userId: user._id,
-      name
-    });
+    if (isPetSitter) {
+      await PetSitter.create({
+        userId: user._id,
+        name,
+      });
+    } else {
+      await Profile.create({
+        userId: user._id,
+        name,
+      });
+    }
 
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
 
     res.cookie("token", token, {
       httpOnly: true,
-      maxAge: secondsInWeek * 1000
+      maxAge: secondsInWeek * 1000,
     });
 
     res.status(201).json({
       success: {
         user: {
           id: user._id,
-          name: user.name,
-          email: user.email
-        }
-      }
+          email: user.email,
+        },
+      },
     });
   } else {
     res.status(400);
@@ -71,9 +79,9 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 // @route POST /auth/demo
 // @desc Login DEMO user
 // @access Public
-exports.demoUser = asyncHandler(async (req, res, next) => {  
-  const email = process.env.DEMO_USER_EMAIL
-  const password = process.env.DEMO_USER_PASSWORD
+exports.demoUser = asyncHandler(async (req, res, next) => {
+  const email = process.env.DEMO_USER_EMAIL;
+  const password = process.env.DEMO_USER_PASSWORD;
   await loginHelper(res, email, password);
 });
 
@@ -93,11 +101,10 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
     success: {
       user: {
         id: user._id,
-        name: user.name,
-        email: user.email
+        email: user.email,
       },
-      profile
-    }
+      profile,
+    },
   });
 });
 
