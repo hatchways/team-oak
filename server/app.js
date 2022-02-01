@@ -11,11 +11,13 @@ const logger = require("morgan");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const uploadImageRouter = require("./routes/uploadImage");
 const profileRouter = require("./routes/profile");
 const notificationRouter = require("./routes/notifications");
 const stripeRouter = require("./routes/stripe");
 const requestRouter = require("./routes/request");
 const paymentRouter = require("./routes/payment");
+const stripeRouter = require("./routes/stripe");
 
 const { json, urlencoded } = express;
 
@@ -50,6 +52,7 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
+app.use("/upload", uploadImageRouter);
 app.use("/notifications", notificationRouter);
 app.use("/requests", requestRouter);
 app.use("/connect", stripeRouter);
