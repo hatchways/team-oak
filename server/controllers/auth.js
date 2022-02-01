@@ -4,7 +4,7 @@ const PetSitter = require("../models/PetSitter");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 const loginHelper = require("../helpers/loginHelper");
-const newCustomer = require("./stripe")
+const newCustomer = require("./stripe");
 
 // @route POST /auth/register
 // @desc Register user
@@ -37,6 +37,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         userId: user._id,
         name,
       });
+      newCustomer.createCustomer(user, profile);
     }
 
     const token = generateToken(user._id);
@@ -55,9 +56,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         },
       },
     });
-
-    newCustomer.createCustomer(user, profile);
-
   } else {
     res.status(400);
     throw new Error("Invalid user data");

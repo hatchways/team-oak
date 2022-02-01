@@ -16,7 +16,6 @@ const profileRouter = require("./routes/profile");
 const notificationRouter = require("./routes/notifications");
 const stripeRouter = require("./routes/stripe");
 const requestRouter = require("./routes/request");
-const stripeRouter = require("./routes/stripe");
 
 const { json, urlencoded } = express;
 
