@@ -10,6 +10,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { makeStyles } from '@mui/styles';
 import editProfile from '../../../helpers/APICalls/editProfile';
 import { useSnackBar } from '../../../context/useSnackbarContext';
+import { Profile } from '../../../interface/Profile';
 
 const useStyles = makeStyles({
   dateInput: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles({
 interface EditProfileProps {
   header: string;
   currentUser?: User; // set to optional but always passed in from settings
-  currentProfile?: any;
+  currentProfile?: Profile;
 }
 
 const EditProfile: React.FC<EditProfileProps> = ({ header, currentUser, currentProfile }) => {
@@ -83,13 +84,13 @@ const EditProfile: React.FC<EditProfileProps> = ({ header, currentUser, currentP
       <SettingHeader header={header} />
       <Formik
         initialValues={{
-          name: currentUser?.name || '',
+          name: currentProfile?.name || '',
           email: currentUser?.email || '',
-          gender: currentProfile.gender || 'none',
-          birthday: currentProfile.birthday || new Date(),
-          telephone: currentProfile.telephone || '',
-          address: currentProfile.address || '',
-          description: currentProfile.description || '',
+          gender: currentProfile?.gender || 'none',
+          birthday: currentProfile?.birthday || new Date(),
+          telephone: currentProfile?.telephone || '',
+          address: currentProfile?.address || '',
+          description: currentProfile?.description || '',
         }}
         onSubmit={handleSubmit}
       >
