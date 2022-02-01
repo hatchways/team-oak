@@ -1,7 +1,7 @@
 import { FetchOptions } from '../../interface/FetchOptions';
 import { StripeLink } from '../../interface/StripeLink';
 
-export const getLink = async (): Promise<StripeLink> => {
+const getLink = async (): Promise<StripeLink> => {
   const fetchOptions: FetchOptions = {
     method: 'GET',
     credentials: 'include',
@@ -12,3 +12,5 @@ export const getLink = async (): Promise<StripeLink> => {
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
+
+export default getLink;

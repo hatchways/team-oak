@@ -3,7 +3,7 @@ import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import SettingHeader from '../../components/SettingsHeader/SettingsHeader';
 import { Box } from '@mui/material';
-import { getLink } from './../../helpers/APICalls/stripe';
+import getLink from './../../helpers/APICalls/stripe';
 import { StripeLink } from '../../interface/StripeLink';
 
 interface StripeProps {
