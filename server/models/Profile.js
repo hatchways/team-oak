@@ -35,7 +35,7 @@ const profileSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    stripeAccountId: {
+    stripeCustomerId: {
       type: String,
       default: "",
     },

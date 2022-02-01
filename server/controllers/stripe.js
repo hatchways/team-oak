@@ -51,7 +51,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
       name: profile.name,
     });
 
-    profile.stripeAccountId = account.id;
+    profile.stripeCustomerId = account.id;
     await profile.save()
 
     res.status(201).json({
