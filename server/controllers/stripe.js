@@ -42,10 +42,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 // @route GET /connect/newCustomer
 // @desc create new stripe customer account
 // @access Private
-  exports.createCustomer = asyncHandler(async (req, res, next) => { 
-    const user = await User.findById(req.user.id);
-    const profile = await Profile.findOne(req.user);
-  
+  exports.createCustomer = asyncHandler(async (user, profile) => {  
     const account = await stripe.customers.create({
       email: user.email,
       name: profile.name,

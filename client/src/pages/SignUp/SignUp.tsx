@@ -8,7 +8,6 @@ import PageContainer from '../../components/PageContainer/PageContainer';
 import AuthPageFooter from '../../components/AuthPageFooter/AuthPageFooter';
 import DemoButton from '../../components/DemoButton/DemoButton';
 import demo from '../../helpers/APICalls/demo';
-import { newCust } from '../../helpers/APICalls/stripe';
 
 export default function Register(): JSX.Element {
   const { updateLoginContext } = useAuth();
@@ -33,7 +32,6 @@ export default function Register(): JSX.Element {
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
         updateLoginContext(data.success);
-        newCust();
       } else {
         // should not get here from backend but this catch is for an unknown issue
         console.error({ data });

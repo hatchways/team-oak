@@ -3,6 +3,7 @@ const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 const loginHelper = require("../helpers/loginHelper");
+const newCustomer = require("./stripe")
 
 // @route POST /auth/register
 // @desc Register user
@@ -23,7 +24,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   });
 
   if (user) {
-    await Profile.create({
+    const profile = await Profile.create({
       userId: user._id,
       name,
     });
@@ -44,6 +45,9 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         },
       },
     });
+
+    newCustomer.createCustomer(user, profile);
+
   } else {
     res.status(400);
     throw new Error("Invalid user data");
