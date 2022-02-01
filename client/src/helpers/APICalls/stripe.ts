@@ -12,15 +12,3 @@ export const getLink = async (): Promise<StripeLink> => {
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
-
-export const newCust = async (): Promise<string> => {
-  const fetchOptions: FetchOptions = {
-    method: 'GET',
-    credentials: 'include',
-  };
-  return await fetch(`/connect/newCustomer`, fetchOptions)
-    .then((res) => res.json())
-    .catch(() => ({
-      error: { message: 'Unable to connect to server. Please try again' },
-    }));
-};
