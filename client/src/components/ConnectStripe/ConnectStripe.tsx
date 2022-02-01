@@ -24,7 +24,7 @@ export const ConnectStripe: React.FC<StripeProps> = ({ header }) => {
     });
   };
 
-  const checkStatus = profile.stripeAccountId !== '';
+  const checkStatus = profile?.stripeAccountId !== '';
 
   return (
     <Box sx={{ textAlign: 'center' }}>
