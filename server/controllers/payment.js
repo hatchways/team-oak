@@ -107,13 +107,6 @@ exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
   const { amount, currency, sitterId, rate, hoursOfService } = req.body;
   const userId = req.user.id;
 
-  const customer = await stripe.customers.create();
-
-  if (!customer) {
-    res.status(500);
-    throw new Error("Something went wrong");
-  }
-
   const paymentIntent = await stripe.paymentIntents.create({
     amount,
     currency,
