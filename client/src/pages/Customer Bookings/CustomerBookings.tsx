@@ -264,8 +264,8 @@ export default function CustomerBookings(): JSX.Element {
   const platformFee = 5;
   const amount = bookingHours * petSitterRate;
   const invoiceTotal = platformFee + amount;
-  const cards = ['VISA - 1234', 'MASTERCARD - 1234', 'TANGERINE - 3999'];
-  const defaultCard = 'TANGERINE - 3999';
+  const cards = ['VISA - 1234', 'MASTERCARD - 1234', 'AMEX - 1234'];
+  const defaultCard = 'AMEX - 1234';
 
   const makePaymentRadioButton = (card: string) => {
     return <FormControlLabel value={card.toString()} control={<Radio />} label={card} />;
