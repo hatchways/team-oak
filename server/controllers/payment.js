@@ -7,16 +7,15 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // @access Private
 exports.getAllPayments = asyncHandler(async (req, res, next) => {
   const payment = await Payment.find({ userId: req.user.id });
-  if (payment) {
-    res.status(200).json({
-      success: {
-        payment: payment,
-      },
-    });
-  } else {
-    res.status(404);
-    throw new Error("Payments Not Found");
-  }
+
+  res.status(200).json({
+    success: {
+      payment: payment,
+    },
+  });
+
+  res.status(404);
+  throw new Error("Payments Not Found");
 });
 
 // @route GET /payments/:id
@@ -69,7 +68,7 @@ exports.makePayment = asyncHandler(async (req, res, next) => {
     res.status(200).json({
       success: {
         msg: "Payment Complete",
-        payment: payment,
+        payment: updatedPayment,
         paymentConfirmation: paymentConfirmation,
       },
     });
@@ -77,26 +76,29 @@ exports.makePayment = asyncHandler(async (req, res, next) => {
 });
 
 // @route PUT /payments/:id/cancel
-// @desc Cancel current paid payment
+// @desc Cancel current payment
 // @access Private
 exports.cancelPayment = asyncHandler(async (req, res, next) => {
-  const userId = req.user.id;
   const { id } = req.params;
-  const merchantPayment = await Payment.findOne({ id: id, sitterId: userId });
-  if (!merchantPayment) {
-    res.status(203);
-    throw new Error("Only Merchant Can Cancel");
-  } else {
-    merchantPayment.set({ paid: false });
-    const updatedPayment = await merchantPayment.save();
-    if (updatedPayment) {
-      res.status(200).json({
-        success: {
-          payment: updatedPayment,
-          msg: "Payment has been Canceled",
-        },
-      });
-    }
+  const payment = await Payment.findOne({ _id: id });
+
+  const paymentIntent = await stripe.paymentIntents.cancel(payment.paymentIntentId);
+
+  if (!paymentIntent) {
+    res.status(500);
+    throw new Error("Something went wrong");
+  }
+
+  payment.set({ isCancelled: true });
+  const updatedPayment = await payment.save();
+  if (updatedPayment) {
+    res.status(200).json({
+      success: {
+        msg: "Payment cancelled",
+        payment: updatedPayment,
+        paymentIntent: paymentIntent,
+      },
+    });
   }
 });
 
@@ -130,6 +132,7 @@ exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
     res.status(201).json({
       data: {
         payment,
+        paymentIntent,
       },
     });
   } else {
