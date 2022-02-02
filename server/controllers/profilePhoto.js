@@ -10,4 +10,11 @@ exports.uploadProfilePhoto = asyncHandler(async (req, res, next) => {
   const generateUrl = await upload.uploadImageHelper(req.user._id, req.file);
   profile.photo = generateUrl;
   await profile.save();
+
+  res.status(200).json({
+    message: "Profile photo successfully changed",
+    url: {
+      generateUrl,
+    },
+  });
 });
