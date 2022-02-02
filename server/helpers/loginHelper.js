@@ -20,7 +20,6 @@ const loginHelper = async (res, email, password) => {
       success: {
         user: {
           id: user._id,
-          name: user.name,
           email: user.email,
         },
         profile,
