@@ -1,4 +1,4 @@
 export const AccountType = {
-  PET_SITTER: 'pet_sitter',
-  PET_OWNER: 'pet_owner',
+  PET_SITTER: 'petSitter',
+  PET_OWNER: 'petOwner',
 };

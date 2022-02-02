@@ -11,9 +11,12 @@ const logger = require("morgan");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const uploadImageRouter = require("./routes/uploadImage");
 const profileRouter = require("./routes/profile");
+const notificationRouter = require("./routes/notifications");
 const stripeRouter = require("./routes/stripe");
-const paymentRouter = require("./routes/payment");
+const requestRouter = require("./routes/request");
+const stripeRouter = require("./routes/stripe");
 
 const { json, urlencoded } = express;
 
@@ -30,6 +33,7 @@ const io = socketio(server, {
 io.on("connection", (socket) => {
   console.log("connected");
 });
+app.set("socketio", io);
 
 if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
@@ -47,6 +51,9 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
+app.use("/upload", uploadImageRouter);
+app.use("/notifications", notificationRouter);
+app.use("/requests", requestRouter);
 app.use("/connect", stripeRouter);
 app.use("/payments", paymentRouter);
 
