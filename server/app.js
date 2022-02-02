@@ -17,7 +17,6 @@ const userRouter = require("./routes/user");
 const uploadImageRouter = require("./routes/uploadImage");
 const profileRouter = require("./routes/profile");
 const notificationRouter = require("./routes/notifications");
-const stripeRouter = require("./routes/stripe");
 const requestRouter = require("./routes/request");
 const stripeRouter = require("./routes/stripe");
 
@@ -44,7 +43,7 @@ io.on("connection", (socket) => {
     console.log("invalid token - socket disconnected");
   }
 
-  socket.on(NEW_MSG, (data) => {
+  socket.on("NEW_MSG", (data) => {
     console.log("data", data);
   });
 
@@ -78,7 +77,9 @@ app.use("/connect", stripeRouter);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
 
-  app.get("*", (req, res) => res.sendFile(path.resolve(__dirname), "client", "build", "index.html"));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname), "client", "build", "index.html")
+  );
 } else {
   app.get("/", (req, res) => {
     res.send("API is running");
