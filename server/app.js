@@ -3,6 +3,9 @@ const path = require("path");
 const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
+const socketCookieParser = require("./utils/socketCookieParser");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
 const { notFound, errorHandler } = require("./middleware/error");
 const connectDB = require("./db");
 const { join } = require("path");
@@ -11,10 +14,11 @@ const logger = require("morgan");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const uploadImageRouter = require("./routes/uploadImage");
 const profileRouter = require("./routes/profile");
 const notificationRouter = require("./routes/notifications");
-const stripeRouter = require("./routes/stripe");
 const requestRouter = require("./routes/request");
+const stripeRouter = require("./routes/stripe");
 
 const { json, urlencoded } = express;
 
@@ -24,12 +28,28 @@ const server = http.createServer(app);
 
 const io = socketio(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
+    credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
-  console.log("connected");
+  let cookies = socketCookieParser(socket.handshake.headers.cookie);
+  try {
+    let verifiedToken = jwt.verify(cookies.token, process.env.JWT_SECRET);
+    console.log("connected - verifiedToken", verifiedToken);
+  } catch (err) {
+    socket.disconnect();
+    console.log("invalid token - socket disconnected");
+  }
+
+  socket.on("NEW_MSG", (data) => {
+    console.log("data", data);
+  });
+
+  socket.on("disconnect", () => {
+    //socket.leave(room);
+  });
 });
 app.set("socketio", io);
 
@@ -49,6 +69,7 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
+app.use("/upload", uploadImageRouter);
 app.use("/notifications", notificationRouter);
 app.use("/requests", requestRouter);
 app.use("/connect", stripeRouter);
@@ -56,7 +77,9 @@ app.use("/connect", stripeRouter);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
 
-  app.get("*", (req, res) => res.sendFile(path.resolve(__dirname), "client", "build", "index.html"));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname), "client", "build", "index.html")
+  );
 } else {
   app.get("/", (req, res) => {
     res.send("API is running");
