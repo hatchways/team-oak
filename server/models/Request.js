@@ -35,7 +35,6 @@ const requestSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
-  address: addressSchema,
 });
 
 module.exports = Request = mongoose.model("Request", requestSchema);

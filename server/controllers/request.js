@@ -20,40 +20,29 @@ exports.loadRequests = asyncHandler(async (req, res, next) => {
 // @desc Create a new request
 // @access Private
 exports.newRequest = asyncHandler(async (req, res, next) => {
-  if (
-    Object.keys(req.body).length === 0 &&
-    Object.keys(req.query).length !== 0
-  ) {
-    res.status(400).json({
-      status: "POST to /routes failed",
-      message: "Request cannot be made in query parameters",
-    });
-  }
+  const userId = req.user.id;
+  const { start, end } = req.body;
+  const sitterId = req.params.id;
 
-  const data = req.body;
-
-  const request = new Request({
-    userId: data.userId,
-    sitterId: data.sitterId,
-    start: data.start,
-    end: data.end,
-    accepted: data.accepted,
-    declined: data.declined,
-    paid: data.paid,
-    address: {
-      houseNumber: data.address.houseNumber,
-      street: data.address.street,
-      district: data.address.district,
-      city: data.address.city,
-      county: data.address.county,
-      postalCode: data.address.postalCode,
-      country: data.address.country,
-    },
+  const request = await Request.create({
+    userId,
+    sitterId,
+    start,
+    end,
   });
 
-  await request.save();
-
-  res.status(200).json(request);
+  if (request) {
+    res.status(201).json({
+      success: {
+        request: {
+          request,
+        },
+      },
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
 });
 
 // @route PATCH /requests/:requestId

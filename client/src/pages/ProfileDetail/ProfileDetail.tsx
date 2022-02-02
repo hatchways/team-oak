@@ -102,7 +102,7 @@ const ProfileDetail: React.FC<RouteComponentProps<RouterProps>> = ({ match }) =>
         </Box>
       </Grid>
       <Grid item xs={12} sm={12} md={3} lg={3} sx={{ m: 1 }}>
-        <BookingForm rate={profile.rate} rating={profile.rating} />
+        <BookingForm rate={profile.rate} rating={profile.rating} sitterId={match.params.userId} />
       </Grid>
     </Grid>
   );
