@@ -16,7 +16,7 @@ const profileRouter = require("./routes/profile");
 const notificationRouter = require("./routes/notifications");
 const stripeRouter = require("./routes/stripe");
 const requestRouter = require("./routes/request");
-const stripeRouter = require("./routes/stripe");
+const profilePhotoRouter = require("./routes/profilePhoto");
 
 const { json, urlencoded } = express;
 
@@ -55,11 +55,14 @@ app.use("/upload", uploadImageRouter);
 app.use("/notifications", notificationRouter);
 app.use("/requests", requestRouter);
 app.use("/connect", stripeRouter);
+app.use("/profilePhoto", profilePhotoRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
 
-  app.get("*", (req, res) => res.sendFile(path.resolve(__dirname), "client", "build", "index.html"));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname), "client", "build", "index.html")
+  );
 } else {
   app.get("/", (req, res) => {
     res.send("API is running");
