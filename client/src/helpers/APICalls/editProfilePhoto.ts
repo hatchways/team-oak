@@ -7,7 +7,7 @@ const editProfilePhoto = async (data: FormData): Promise<PhotoLink> => {
     body: data,
     credentials: 'include',
   };
-  return await fetch(`/uploadImage/single`, fetchOptions)
+  return await fetch(`/profilePhoto/upload`, fetchOptions)
     .then((res) => res.json())
     .catch(() => ({
       error: { message: 'Unable to connect to server. Please try again' },
