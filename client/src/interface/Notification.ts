@@ -7,5 +7,9 @@ export interface Notification {
   type: string;
   description: string;
   read: boolean;
-  date: Date;
+  date: {
+    month: number;
+    day: number;
+    year: number;
+  };
 }

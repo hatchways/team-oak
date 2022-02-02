@@ -22,8 +22,7 @@ const Notification: React.FC<{
 }> = ({ notif, handleClose }) => {
   const classes = useStyles();
 
-  const date = new Date(notif.date);
-  const [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
+  const { month, day, year } = notif.date;
 
   const route = notif.type === 'booking' ? '/bookings' : notif.type === 'user' ? '/messages' : {};
 
@@ -35,7 +34,7 @@ const Notification: React.FC<{
       <Box>
         <ListItemText className={classes.desc}>{notif.description}</ListItemText>
         <ListItemText className={classes.title}>{notif.title}</ListItemText>
-        <ListItemText className={classes.date}>{`${month + 1}/${day}/${year}`}</ListItemText>
+        <ListItemText className={classes.date}>{`${month}/${day}/${year}`}</ListItemText>
       </Box>
     </DropdownMenuItem>
   );
@@ -46,6 +45,7 @@ const Notifications = (): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [notifs, setNotifs] = useState<INotification[]>([]);
   const [active, setActive] = useState<boolean>(false);
+  const [opened, setOpened] = useState<boolean>(false);
 
   const open = Boolean(anchorEl);
 
@@ -53,6 +53,7 @@ const Notifications = (): JSX.Element => {
 
   const handleOpen = async () => {
     setAnchorEl(notifRef.current);
+    setOpened(true);
 
     try {
       await Promise.all(notifs.map((notif) => markNotificationAsRead(notif._id)));
@@ -64,6 +65,7 @@ const Notifications = (): JSX.Element => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    setOpened(false);
     setNotifs([]);
   };
 
@@ -81,7 +83,7 @@ const Notifications = (): JSX.Element => {
   });
 
   return (
-    <Box>
+    <Box sx={{ height: '30px', marginTop: '5px' }}>
       <Button
         variant="text"
         size="large"
@@ -91,10 +93,12 @@ const Notifications = (): JSX.Element => {
         onClick={handleOpen}
         className={classes.btn}
         ref={notifRef}
+        disableRipple
       >
         <Box sx={{ display: active ? 'block' : 'none' }} className={classes.notification} />
         Notifications
       </Button>
+      <Box sx={{ display: opened ? 'block' : 'none' }} className={classes.arrow} />
       <Menu
         id="notifications-appbar"
         anchorEl={anchorEl}
