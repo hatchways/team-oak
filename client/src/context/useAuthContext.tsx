@@ -4,9 +4,10 @@ import { AuthApiData, AuthApiDataSuccess } from '../interface/AuthApiData';
 import { User } from '../interface/User';
 import loginWithCookies from '../helpers/APICalls/loginWithCookies';
 import logoutAPI from '../helpers/APICalls/logout';
+import { Profile } from '../interface/Profile';
 
 interface IAuthContext {
-  profile: any;
+  profile: Profile | null | undefined;
   loggedInUser: User | null | undefined;
   updateLoginContext: (data: AuthApiDataSuccess) => void;
   logout: () => void;
@@ -22,7 +23,7 @@ export const AuthContext = createContext<IAuthContext>({
 export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   // default undefined before loading, once loaded provide user or null if logged out
   const [loggedInUser, setLoggedInUser] = useState<User | null | undefined>();
-  const [profile, setProfile] = useState();
+  const [profile, setProfile] = useState<Profile | null | undefined>();
   const history = useHistory();
 
   const updateLoginContext = useCallback(
