@@ -70,7 +70,7 @@ exports.cancelPayment = asyncHandler(async (req, res, next) => {
     res.status(203);
     throw new Error("Only Merchant Can Cancel");
   } else {
-    merchantPayment.set({ paid: false });
+    merchantPayment.set({ paid: false, cancel: true });
     const updatedPayment = await merchantPayment.save();
     if (updatedPayment) {
       res.status(200).json({
