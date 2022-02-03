@@ -10,7 +10,7 @@ const {
 
 router.route("/").get(protect, loadRequests);
 
-router.route("/").post(protect, validateRequest, newRequest);
+router.route("/:id").post(protect, newRequest);
 
 router.route("/:requestId").patch(protect, updateRequest);
 

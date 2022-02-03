@@ -64,7 +64,11 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.markNotificationAsRead = asyncHandler(async (req, res, next) => {
   const query = { _id: req.body.id };
-  const notification = await Notification.findOneAndUpdate(query, { read: true }, { new: true });
+  const notification = await Notification.findOneAndUpdate(
+    query,
+    { read: true },
+    { new: true }
+  );
 
   if (!notification) {
     res.status(404);
@@ -100,7 +104,10 @@ exports.getAllNotifications = asyncHandler(async (req, res, next) => {
 // @desc Get all unread user notifications
 // @access Private
 exports.getUnreadNotifications = asyncHandler(async (req, res, next) => {
-  const notifications = await Notification.find({ userId: req.user.id, read: false });
+  const notifications = await Notification.find({
+    userId: req.user.id,
+    read: false,
+  });
 
   if (!notifications) {
     res.status(400);
