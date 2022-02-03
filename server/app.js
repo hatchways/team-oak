@@ -17,8 +17,10 @@ const userRouter = require("./routes/user");
 const uploadImageRouter = require("./routes/uploadImage");
 const profileRouter = require("./routes/profile");
 const notificationRouter = require("./routes/notifications");
-const requestRouter = require("./routes/request");
 const stripeRouter = require("./routes/stripe");
+const availabilityRouter = require('./routes/availability');
+const requestRouter = require("./routes/request");
+const profilePhotoRouter = require("./routes/profilePhoto");
 
 const { json, urlencoded } = express;
 
@@ -73,6 +75,8 @@ app.use("/upload", uploadImageRouter);
 app.use("/notifications", notificationRouter);
 app.use("/requests", requestRouter);
 app.use("/connect", stripeRouter);
+app.use("/availability", availabilityRouter);
+app.use("/profilePhoto", profilePhotoRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));

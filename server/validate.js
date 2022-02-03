@@ -69,3 +69,38 @@ exports.validateRequest = [
     next();
   },
 ];
+
+exports.validateSchedule = [
+  check("mondayFrom", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("tuesdayFrom", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("wednesdayFrom", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("thursdayFrom", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("fridayFrom", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("saturdayFrom", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("sundayFrom", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("mondayTo", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("tuesdayTo", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("wednesdayTo", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("thursdayTo", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("fridayTo", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("saturdayTo", "Please use hours from 0 to 24").isInt({min:0,max:24}),
+  check("sundayTo", "Please use hours from 0 to 24").isInt({min:0,max:24}), 
+
+  check("mondayTo", "Start time must be before end time").custom((value, {req}) => value - req.body.mondayFrom),
+  check("tuesdayTo", "Start time must be before end time").custom((value, {req}) => value - req.body.tuesdayFrom),
+  check("wednesdayTo", "Start time must be before end time").custom((value, {req}) => value - req.body.wednesdayFrom),
+  check("thursdayTo", "Start time must be before end time").custom((value, {req}) => value - req.body.thursdayFrom),
+  check("fridayTo", "Start time must be before end time").custom((value, {req}) => value - req.body.fridayFrom),
+  check("saturdayTo", "Start time must be before end time").custom((value, {req}) => value - req.body.saturdayFrom),
+  check("sundayTo", "Start time must be before end time").custom((value, {req}) => value - req.body.sundayFrom),
+
+  check("name", "Schedule must have a name").not().isEmpty(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() });
+    next();
+  }
+];
