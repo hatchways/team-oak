@@ -4,6 +4,9 @@ const asyncHandler = require("express-async-handler");
 const dotenv = require('dotenv').config({path:__dirname+'/./../.env'})
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+// @route GET /connect/stripe
+// @desc create new petsitter account
+// @access Private
 exports.createUser = asyncHandler(async (req, res, next) => { 
   const user = await User.findById(req.user.id);
   const profile = await Profile.findOne(req.user);
@@ -35,3 +38,20 @@ exports.createUser = asyncHandler(async (req, res, next) => {
       }
     })
   });
+
+// @route GET /connect/newCustomer
+// @desc create new stripe customer account
+// @access Private
+  exports.createCustomer = asyncHandler(async (user, profile) => {  
+    const account = await stripe.customers.create({
+      email: user.email,
+      name: profile.name,
+    });
+
+    profile.stripeCustomerId = account.id;
+    await profile.save()
+
+    res.status(201).json({
+      success: 'new customer created'
+    })
+  })

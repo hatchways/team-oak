@@ -18,7 +18,6 @@ const uploadImageRouter = require("./routes/uploadImage");
 const profileRouter = require("./routes/profile");
 const notificationRouter = require("./routes/notifications");
 const requestRouter = require("./routes/request");
-const stripeRouter = require("./routes/stripe");
 
 const { json, urlencoded } = express;
 
