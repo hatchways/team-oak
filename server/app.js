@@ -3,6 +3,9 @@ const path = require("path");
 const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
+const socketCookieParser = require("./utils/socketCookieParser");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
 const { notFound, errorHandler } = require("./middleware/error");
 const connectDB = require("./db");
 const { join } = require("path");
@@ -17,6 +20,7 @@ const notificationRouter = require("./routes/notifications");
 const stripeRouter = require("./routes/stripe");
 const availabilityRouter = require('./routes/availability');
 const requestRouter = require("./routes/request");
+const profilePhotoRouter = require("./routes/profilePhoto");
 
 const { json, urlencoded } = express;
 
@@ -26,12 +30,28 @@ const server = http.createServer(app);
 
 const io = socketio(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
+    credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
-  console.log("connected");
+  let cookies = socketCookieParser(socket.handshake.headers.cookie);
+  try {
+    let verifiedToken = jwt.verify(cookies.token, process.env.JWT_SECRET);
+    console.log("connected - verifiedToken", verifiedToken);
+  } catch (err) {
+    socket.disconnect();
+    console.log("invalid token - socket disconnected");
+  }
+
+  socket.on("NEW_MSG", (data) => {
+    console.log("data", data);
+  });
+
+  socket.on("disconnect", () => {
+    //socket.leave(room);
+  });
 });
 app.set("socketio", io);
 
@@ -56,11 +76,14 @@ app.use("/notifications", notificationRouter);
 app.use("/requests", requestRouter);
 app.use("/connect", stripeRouter);
 app.use("/availability", availabilityRouter);
+app.use("/profilePhoto", profilePhotoRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
 
-  app.get("*", (req, res) => res.sendFile(path.resolve(__dirname), "client", "build", "index.html"));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname), "client", "build", "index.html")
+  );
 } else {
   app.get("/", (req, res) => {
     res.send("API is running");
