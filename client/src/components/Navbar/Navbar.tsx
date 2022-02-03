@@ -41,7 +41,7 @@ const menuItems = [
   },
   {
     item: 'My Jobs',
-    resource: '/my-jobs',
+    resource: '/bookings',
     canView: [AccountType.PET_SITTER],
     authenticated: true,
   },
