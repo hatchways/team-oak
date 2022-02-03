@@ -1,5 +1,3 @@
-
-   
 const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
 
@@ -35,6 +33,24 @@ exports.loadProfile = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: {
+      profile: profile,
+    },
+  });
+});
+
+// @route GET /profile/loadFromId
+// @desc Get user profile data
+// @access Private
+exports.loadProfileFromId = asyncHandler(async (req, res, next) => {
+  const profile = await Profile.findOne({ userId: req.user.id });
+
+  if (!profile) {
+    res.status(404);
+    throw new Error("Profile does not exist");
+  }
+
+  res.status(200).json({
+    data: {
       profile: profile,
     },
   });

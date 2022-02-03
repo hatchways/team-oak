@@ -32,9 +32,22 @@ const notificationsSchema = new mongoose.Schema({
     default: false,
   },
   date: {
-    type: Date,
-    default: Date.now,
+    month: {
+      type: Number,
+      required: true,
+    },
+    day: {
+      type: Number,
+      required: true,
+    },
+    year: {
+      type: Number,
+      required: true,
+    },
   },
 });
 
-module.exports = Notifications = mongoose.model("Notifications", notificationsSchema);
+module.exports = Notifications = mongoose.model(
+  "Notifications",
+  notificationsSchema
+);

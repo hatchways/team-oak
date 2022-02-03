@@ -8,5 +8,10 @@ export interface Profile {
   birthday: Date;
   photo: string;
   stripeAccountId: string;
+  rating: number;
+  about: string;
+  aboutImages: string[];
+  backgroundPhoto: string;
+  rate: number;
   type: string;
 }

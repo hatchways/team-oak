@@ -1,26 +1,61 @@
-import { Grid, Box, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Grid, Box, Typography, Card, CardMedia, CardContent, CircularProgress } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import useStyles from './useStyles';
 import BookingForm from './BookingForm/BookingForm';
+import { RouteComponentProps, withRouter } from 'react-router';
+import getProfileFromId from '../../helpers/APICalls/getProfileFromId';
 
-const baseUrl = 'https://images.pexels.com/photos/';
+interface IProfile {
+  name: string;
+  photo: string;
+  backgroundPhoto: string;
+  about: string;
+  address: string;
+  description: string;
+  aboutImages: Array<string>;
+  rate: number;
+  rating: number;
+}
+interface RouterProps {
+  userId: string;
+}
 
-const profile = {
-  name: 'Norma Byers',
-  description:
-    'Animals are my passion! I will look after your pets with loving care. I have some availability for pet care in my home as well. I have 10 yrs experience at the Animal Hospital, and have owned multiple pets for many years, including numerous rescues. Kindly email, text or call me and I will respond promptly!',
-  aboutMe: 'Loving pet sitter',
-  imageImg: baseUrl + '1382731/pexels-photo-1382731.jpeg?auto=compress&cs=tinysrgb&h=650&w=650',
-  backgroundImg: baseUrl + '3299905/pexels-photo-3299905.jpeg?auto=compress&cs=tinysrgb',
-  location: 'Toronto, Ontario',
-  aboutImg: [
-    '2253275/pexels-photo-2253275.jpeg?auto=compress&cs=tinysrgb',
-    '4681107/pexels-photo-4681107.jpeg?auto=compress&cs=tinysrgb',
-  ],
-};
-
-const ProfileDetail = (): JSX.Element => {
+const ProfileDetail: React.FC<RouteComponentProps<RouterProps>> = ({ match }) => {
   const classes = useStyles();
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [profile, setProfile] = useState<IProfile>({
+    name: '',
+    photo: '',
+    backgroundPhoto: '',
+    about: '',
+    address: '',
+    description: '',
+    aboutImages: [],
+    rate: 0,
+    rating: 0,
+  });
+
+  const getProfile = useCallback(async () => {
+    setLoading(true);
+    try {
+      const userId = match.params.userId;
+      const response = await getProfileFromId(userId);
+      setProfile(response);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [match.params.userId]);
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
+
+  if (loading) {
+    return <CircularProgress sx={{ position: 'absolute', top: '50%', left: '50%' }} />;
+  }
 
   return (
     <Grid container className={classes.rootContainer}>
@@ -29,18 +64,19 @@ const ProfileDetail = (): JSX.Element => {
           <Card className={classes.profileCard}>
             <CardMedia
               className={classes.backgroundImg}
-              image={profile.backgroundImg}
+              component="img"
+              image={profile.backgroundPhoto}
               title="Profile background image"
             />
             <CardContent className={classes.topCardContent}>
-              <CardMedia className={classes.userImg} image={profile.imageImg} title="Profile image" />
+              <CardMedia className={classes.userImg} component="img" image={profile.photo} title="Profile image" />
               <Typography variant="h6" className={classes.userNameText}>
                 {profile.name}
               </Typography>
-              <Typography className={classes.userTitleText}>{profile.aboutMe}</Typography>
+              <Typography className={classes.userTitleText}>{profile.description}</Typography>
               <Box className={classes.boxLocation}>
                 <LocationOnIcon className={classes.userLocationIcon} />
-                <Typography className={classes.userLocationText}>{profile.location}</Typography>
+                <Typography className={classes.userLocationText}>{profile.address}</Typography>
               </Box>
             </CardContent>
             <CardContent className={classes.bottomCardContent}>
@@ -48,14 +84,15 @@ const ProfileDetail = (): JSX.Element => {
                 <Typography variant="h5" className={classes.userDescriptionHeaderText}>
                   About me
                 </Typography>
-                <Typography variant="body1">{profile.description}</Typography>
+                <Typography variant="body1">{profile.about}</Typography>
               </Box>
               <Box width="100%" display="flex" alignItems="center" marginBottom="15px">
-                {profile.aboutImg.map((image) => (
+                {profile.aboutImages.map((image) => (
                   <CardMedia
                     key={image}
+                    component="img"
                     className={classes.userAdditionalPhoto}
-                    image={baseUrl + image}
+                    image={image}
                     title="user's additional photo"
                   />
                 ))}
@@ -65,10 +102,10 @@ const ProfileDetail = (): JSX.Element => {
         </Box>
       </Grid>
       <Grid item xs={12} sm={12} md={3} lg={3} sx={{ m: 1 }}>
-        <BookingForm></BookingForm>
+        <BookingForm rate={profile.rate} rating={profile.rating} sitterId={match.params.userId} />
       </Grid>
     </Grid>
   );
 };
 
-export default ProfileDetail;
+export default withRouter(ProfileDetail);

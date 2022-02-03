@@ -44,8 +44,28 @@ const profileSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    about: {
+      type: String,
+      default: "",
+    },
+    aboutImages: {
+      type: [String],
+      default: [],
+    },
+    backgroundPhoto: {
+      type: String,
+      default: "",
+    },
+    rate: {
+      type: Number,
+      default: 0,
+    },
   },
-  { discriminatorKey: "type" }
+  { discriminatorKey: "type" },
 );
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);

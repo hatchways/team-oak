@@ -15,11 +15,14 @@ const getSenderPhoto = asyncHandler(async (id) => {
 // @desc create new notification
 // @access Private
 exports.createNotification = asyncHandler(async (req, res, next) => {
-  const { receiverId, title, type, description, read, date } = req.body;
+  const { receiverId, title, type, description } = req.body;
 
   const senderId = req.user.id;
 
   const senderPhoto = await getSenderPhoto(senderId);
+
+  const date = new Date();
+  let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
 
   const notification = await Notification.create({
     senderId,
@@ -28,8 +31,11 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
     title,
     type,
     description,
-    read,
-    date,
+    date: {
+      month: ++month,
+      day,
+      year,
+    },
   });
 
   if (notification) {
@@ -64,7 +70,11 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.markNotificationAsRead = asyncHandler(async (req, res, next) => {
   const query = { _id: req.body.id };
-  const notification = await Notification.findOneAndUpdate(query, { read: true }, { new: true });
+  const notification = await Notification.findOneAndUpdate(
+    query,
+    { read: true },
+    { new: true }
+  );
 
   if (!notification) {
     res.status(404);
@@ -100,7 +110,10 @@ exports.getAllNotifications = asyncHandler(async (req, res, next) => {
 // @desc Get all unread user notifications
 // @access Private
 exports.getUnreadNotifications = asyncHandler(async (req, res, next) => {
-  const notifications = await Notification.find({ userId: req.user.id, read: false });
+  const notifications = await Notification.find({
+    userId: req.user.id,
+    read: false,
+  });
 
   if (!notifications) {
     res.status(400);
