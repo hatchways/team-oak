@@ -7,7 +7,6 @@ const seedDB = async (req, res, next) => {
   const demoUser = new User({
     email: process.env.DEMO_USER_EMAIL,
     password: process.env.DEMO_USER_PASSWORD,
-    name: "Marry Wills",
   });
 
   const conn = await mongoose.connect(process.env.MONGO_URI);
