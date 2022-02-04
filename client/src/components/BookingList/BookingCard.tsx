@@ -22,7 +22,7 @@ const BookingCard = ({ booking }: PropTypes) => {
         <Box sx={{ height: '10px' }}></Box>
         <Grid container alignItems="center">
           <Grid item xs={2}>
-            <Avatar src={`https://robohash.org/${booking.sitter.email}`}>{booking.sitter.name[0]}</Avatar>
+            <Avatar src={`https://robohash.org/${booking.sitter.email}`}>{booking.sitter.name}</Avatar>
           </Grid>
           <Grid item xs={7}>
             <Typography sx={{ fontSize: '0.8rem', fontWeight: 'bold', marginLeft: '5px' }}>
