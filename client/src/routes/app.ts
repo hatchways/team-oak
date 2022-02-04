@@ -47,7 +47,6 @@ export const appRoutes: AppRouteType[] = [
     exact: false,
   },
   {
-
     to: '/mysitters',
     component: CustomerBookings,
     canView: [AccountType.PET_OWNER],
