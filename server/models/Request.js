@@ -1,41 +1,49 @@
 const mongoose = require("mongoose");
-const { addressSchema } = require("./Address");
+const { Schema } = mongoose;
+const { ObjectId } = Schema.Types;
+const required = true;
 
-const requestSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
+const requestSchema = new Schema({
+  owner: {
+    type: ObjectId,
+    ref: "user",
+    required,
   },
-  sitterId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
+  sitter: {
+    type: ObjectId,
+    ref: "user",
+    required,
   },
   start: {
     type: Date,
-    required: true,
+    required,
+    validate: {
+      validator: function (start) {
+        const startMidnight = new Date(start);
+        const currentMidnight = new Date();
+
+        startMidnight.setHours(0, 0, 0, 0);
+        currentMidnight.setHours(0, 0, 0, 0);
+        return startMidnight >= currentMidnight;
+      },
+      message: "'start' must be current day or future",
+    },
   },
   end: {
     type: Date,
-    required: true,
+    required,
+    validate: {
+      validator: function (end) {
+        return end > this.start;
+      },
+      message: "'end' time must come after 'start' time",
+    },
   },
-  accepted: {
-    type: Boolean,
-    required: true,
-    default: false,
+  status: {
+    type: String,
+    enum: ["pending", "accepted", "declined", "paid"],
+    default: "pending",
   },
-  declined: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  paid: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  address: addressSchema,
 });
 
 module.exports = Request = mongoose.model("Request", requestSchema);

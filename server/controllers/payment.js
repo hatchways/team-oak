@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Payment = require("../models/Payment");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // @route GET /payments
 // @desc Get all payment from user
@@ -41,44 +42,102 @@ exports.getPayment = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.makePayment = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const userId = req.user.id;
-  const payment = await Payment.findOne({ userId: userId, id });
+  const payment = await Payment.findOne({ id });
+
   if (!payment) {
     res.status(404);
     throw new Error("Payment doesn't exist");
   }
-  payment.set({ paid: true });
+
+  if (payment.isPaid) {
+    res.status(400);
+    throw new Error("This payment has already be made");
+  }
+
+  const paymentConfirmation = await stripe.paymentIntents.confirm(payment.paymentIntentId, {
+    payment_method: "pm_card_visa",
+  });
+
+  if (!paymentConfirmation) {
+    res.status(500);
+    throw new Error("Something went wrong");
+  }
+
+  payment.set({ isPaid: true });
   const updatedPayment = await payment.save();
   if (updatedPayment) {
     res.status(200).json({
       success: {
-        payment: updatedPayment,
         msg: "Payment Complete",
+        payment: updatedPayment,
+        paymentConfirmation: paymentConfirmation,
       },
     });
   }
 });
 
 // @route PUT /payments/:id/cancel
-// @desc Cancel current paid payment
+// @desc Cancel current payment
 // @access Private
 exports.cancelPayment = asyncHandler(async (req, res, next) => {
-  const userId = req.user.id;
   const { id } = req.params;
-  const merchantPayment = await Payment.findOne({ id: id, sitterId: userId });
-  if (!merchantPayment) {
-    res.status(203);
-    throw new Error("Only Merchant Can Cancel");
+  const payment = await Payment.findOne({ _id: id });
+
+  const paymentIntent = await stripe.paymentIntents.cancel(payment.paymentIntentId);
+
+  if (!paymentIntent) {
+    res.status(500);
+    throw new Error("Something went wrong");
+  }
+
+  payment.set({ isCancelled: true });
+  const updatedPayment = await payment.save();
+  if (updatedPayment) {
+    res.status(200).json({
+      success: {
+        msg: "Payment cancelled",
+        payment: updatedPayment,
+        paymentIntent: paymentIntent,
+      },
+    });
+  }
+});
+
+// @route POST /payments/newPayment
+// @desc Creates a new payment intent
+// @access Private
+exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
+  const { amount, currency, sitterId, rate, hoursOfService } = req.body;
+  const userId = req.user.id;
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount,
+    currency,
+    payment_method_types: ["card"],
+  });
+
+  if (!paymentIntent) {
+    res.status(500);
+    throw new Error("Something went wrong");
+  }
+
+  const payment = await Payment.create({
+    sitterId,
+    userId,
+    rate,
+    paymentIntentId: paymentIntent.id,
+    hoursOfService,
+  });
+
+  if (payment) {
+    res.status(201).json({
+      data: {
+        payment,
+        paymentIntent,
+      },
+    });
   } else {
-    merchantPayment.set({ paid: false, cancel: true });
-    const updatedPayment = await merchantPayment.save();
-    if (updatedPayment) {
-      res.status(200).json({
-        success: {
-          payment: updatedPayment,
-          msg: "Payment has been Canceled",
-        },
-      });
-    }
+    res.status(400);
+    throw new Error("Invalid payment data");
   }
 });

@@ -15,11 +15,14 @@ const getSenderPhoto = asyncHandler(async (id) => {
 // @desc create new notification
 // @access Private
 exports.createNotification = asyncHandler(async (req, res, next) => {
-  const { receiverId, title, type, description, read, date } = req.body;
+  const { receiverId, title, type, description } = req.body;
 
   const senderId = req.user.id;
 
   const senderPhoto = await getSenderPhoto(senderId);
+
+  const date = new Date();
+  let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()];
 
   const notification = await Notification.create({
     senderId,
@@ -28,8 +31,11 @@ exports.createNotification = asyncHandler(async (req, res, next) => {
     title,
     type,
     description,
-    read,
-    date,
+    date: {
+      month: ++month,
+      day,
+      year,
+    },
   });
 
   if (notification) {

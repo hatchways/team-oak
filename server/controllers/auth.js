@@ -4,6 +4,7 @@ const PetSitter = require("../models/PetSitter");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 const loginHelper = require("../helpers/loginHelper");
+const newCustomer = require("./stripe");
 
 // @route POST /auth/register
 // @desc Register user
@@ -20,15 +21,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     throw new Error("A user with that email already exists");
   }
 
-  const userExists = await User.findOne({ name });
-
-  if (userExists) {
-    res.status(400);
-    throw new Error("A user with that username already exists");
-  }
-
   const user = await User.create({
-    name,
     email,
     password,
   });
@@ -40,10 +33,11 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         name,
       });
     } else {
-      await Profile.create({
+      const profile = await Profile.create({
         userId: user._id,
         name,
       });
+      newCustomer.createCustomer(user, profile);
     }
 
     const token = generateToken(user._id);

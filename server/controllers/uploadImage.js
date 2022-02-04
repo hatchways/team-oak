@@ -6,6 +6,18 @@ const asyncHandler = require("express-async-handler");
 const { dataUri } = require("../middleware/multer");
 const { cloudinary } = require("../utils/cloudinary");
 
+const uploadImageHelper = async (userId, f) => {
+  console.log(userId, f);
+  const file = dataUri(f).content;
+  const uploadResponse = await cloudinary.uploader.upload(file, {
+    folder: `team_oak/${userId}`,
+  });
+  const url = uploadResponse.url;
+  return url;
+};
+
+exports.uploadImageHelper = uploadImageHelper;
+
 exports.uploadImage = asyncHandler(async (req, res, next) => {
   const userId = req.user.id;
   try {

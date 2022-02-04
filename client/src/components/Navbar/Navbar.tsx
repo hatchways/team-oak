@@ -21,6 +21,7 @@ import { useStyles } from './useStyles';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person, Menu as MenuIcon } from '@mui/icons-material';
 import { Box } from '@mui/system';
+import Notifications from './Notification/Notifications';
 
 const NavbarButton = styled(Button)({
   padding: '10px 0',
@@ -41,13 +42,13 @@ const menuItems = [
   },
   {
     item: 'My Jobs',
-    resource: '/my-jobs',
+    resource: '/bookings',
     canView: [AccountType.PET_SITTER],
     authenticated: true,
   },
   {
     item: 'My Sitters',
-    resource: '/sitters',
+    resource: '/mysitters',
     canView: [AccountType.PET_OWNER],
     authenticated: true,
   },
@@ -131,16 +132,23 @@ const MenuItems = () => {
   return (
     <Grid
       container
-      direction={{ xs: 'column', sm: 'row' }}
-      alignItems={{ xs: 'flex-start', sm: 'center' }}
-      gap={{ xs: 4, sm: 2 }}
+      direction={{ xs: 'column', md: 'row' }}
+      alignItems={{ xs: 'flex-start', md: 'center' }}
+      gap={{ xs: 4, md: 0 }}
       justifyContent="flex-end"
       ref={menuRef}
     >
+      {loggedInUser && (
+        <Grid item xs={2}>
+          <Notifications />
+        </Grid>
+      )}
+
       {renderMenuItems()}
+
       {loggedInUser && (
         <Grid xs={2} item>
-          <>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <IconButton
               size="large"
               aria-label="account profile picture"
@@ -186,7 +194,7 @@ const MenuItems = () => {
                 <ListItemText>Logout</ListItemText>
               </DropdownMenuItem>
             </Menu>
-          </>
+          </Box>
         </Grid>
       )}
     </Grid>
@@ -198,7 +206,7 @@ const Navbar: React.FC = () => {
   const classes = useStyles();
 
   const [displayDrawer, setDisplayDrawer] = useState<boolean>(false);
-  const isDesktop = useMediaQuery('(min-width: 700px)');
+  const isDesktop = useMediaQuery('(min-width: 900px)');
 
   const toggleDrawer = (toggle: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -219,10 +227,10 @@ const Navbar: React.FC = () => {
       alignItems="center"
       container
     >
-      <Grid xs={4} md={6} item>
+      <Grid xs={10} md={4} lg={5} item>
         <img className={classes.navbarLogo} src={lovingSitterLogo} />
       </Grid>
-      <Grid xs={8} md={6} item display="flex" justifyContent="flex-end">
+      <Grid xs={2} md={8} lg={7} item display="flex" justifyContent="flex-end">
         {isDesktop ? (
           <MenuItems />
         ) : (

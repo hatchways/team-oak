@@ -7,6 +7,11 @@ const profileSchema = new mongoose.Schema(
       required: true,
       ref: "User",
     },
+    isSitter: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     name: {
       type: String,
       default: "",
@@ -35,12 +40,32 @@ const profileSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    stripeAccountId: {
+    stripeCustomerId: {
       type: String,
       default: "",
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    about: {
+      type: String,
+      default: "",
+    },
+    aboutImages: {
+      type: [String],
+      default: [],
+    },
+    backgroundPhoto: {
+      type: String,
+      default: "",
+    },
+    rate: {
+      type: Number,
+      default: 0,
+    },
   },
-  { discriminatorKey: "type" }
+  { discriminatorKey: "type" },
 );
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);

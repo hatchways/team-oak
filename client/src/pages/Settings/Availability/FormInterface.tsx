@@ -7,9 +7,18 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { Field } from 'formik';
 
-const twentyFourHours = () => {
+const startHours = () => {
   const output = [];
   for (let i = 0; i < 24; i++) {
+    const listItem = <MenuItem value={i}>{`${i}:00`}</MenuItem>;
+    output.push(listItem);
+  }
+  return output;
+};
+
+const endHours = () => {
+  const output = [];
+  for (let i = 1; i < 25; i++) {
     const listItem = <MenuItem value={i}>{`${i}:00`}</MenuItem>;
     output.push(listItem);
   }
@@ -36,8 +45,8 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
             checked={values[day].active}
             onChange={(e: any) => {
               if (!e.target.checked) {
-                setFieldValue(`${day}.startTime`, '0');
-                setFieldValue(`${day}.endTime`, '0');
+                setFieldValue(`${day}.startTime`, '');
+                setFieldValue(`${day}.endTime`, '');
               } else {
                 setFieldValue(`${day}.startTime`, '10');
                 setFieldValue(`${day}.endTime`, '22');
@@ -65,9 +74,7 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
           onChange={(e: any) => {
             if (values[day].active) {
               const val = e.target.value;
-              if (val == '23') {
-                setFieldValue(`${day}.endTime`, '0');
-              } else if (val >= parseInt(values[day].endTime)) {
+              if (val >= parseInt(values[day].endTime)) {
                 setFieldValue(`${day}.endTime`, (parseInt(val) + 1).toString());
               }
               setFieldValue(`${day}.startTime`, val);
@@ -83,7 +90,7 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
           }}
           as={Select}
         >
-          {twentyFourHours()}
+          {startHours()}
         </Field>
       }
       label={
@@ -111,9 +118,7 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
           onChange={(e: any) => {
             if (values[day].active) {
               const val = e.target.value;
-              if (val == '0') {
-                setFieldValue(`${day}.startTime`, '23');
-              } else if (val <= parseInt(values[day].startTime)) {
+              if (val <= parseInt(values[day].startTime)) {
                 setFieldValue(`${day}.startTime`, (parseInt(val) - 1).toString());
               }
               setFieldValue(`${day}.endTime`, val);
@@ -129,7 +134,7 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
           }}
           as={Select}
         >
-          {twentyFourHours()}
+          {endHours()}
         </Field>
       }
       label={

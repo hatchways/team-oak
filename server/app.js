@@ -3,6 +3,9 @@ const path = require("path");
 const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
+const socketCookieParser = require("./utils/socketCookieParser");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
 const { notFound, errorHandler } = require("./middleware/error");
 const connectDB = require("./db");
 const { join } = require("path");
@@ -15,8 +18,10 @@ const uploadImageRouter = require("./routes/uploadImage");
 const profileRouter = require("./routes/profile");
 const notificationRouter = require("./routes/notifications");
 const stripeRouter = require("./routes/stripe");
+const availabilityRouter = require('./routes/availability');
 const requestRouter = require("./routes/request");
-const stripeRouter = require("./routes/stripe");
+const paymentRouter = require("./routes/payment");
+const profilePhotoRouter = require("./routes/profilePhoto");
 
 const { json, urlencoded } = express;
 
@@ -26,12 +31,28 @@ const server = http.createServer(app);
 
 const io = socketio(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
+    credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
-  console.log("connected");
+  let cookies = socketCookieParser(socket.handshake.headers.cookie);
+  try {
+    let verifiedToken = jwt.verify(cookies.token, process.env.JWT_SECRET);
+    console.log("connected - verifiedToken", verifiedToken);
+  } catch (err) {
+    socket.disconnect();
+    console.log("invalid token - socket disconnected");
+  }
+
+  socket.on("NEW_MSG", (data) => {
+    console.log("data", data);
+  });
+
+  socket.on("disconnect", () => {
+    //socket.leave(room);
+  });
 });
 app.set("socketio", io);
 

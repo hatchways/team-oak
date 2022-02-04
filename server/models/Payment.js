@@ -14,6 +14,9 @@ const paymentSchema = new mongoose.Schema(
       required: true,
       ref: "User",
     },
+    paymentIntentId: {
+      type: String,
+    },
     rate: {
       type: Number,
       required: true,
@@ -24,7 +27,6 @@ const paymentSchema = new mongoose.Schema(
     },
     customerId: {
       type: String,
-      required: true,
     },
     paid: {
       type: Boolean,
@@ -34,8 +36,12 @@ const paymentSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isCancelled: {
+      type: Boolean,
+      default: false,
+    },
   },
-  structures
+  structures,
 );
 
 paymentSchema.virtual("totalPayment").get(function () {
