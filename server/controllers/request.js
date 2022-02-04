@@ -1,85 +1,93 @@
 const Request = require("../models/Request");
+const Profile = require("../models/Profile");
 const asyncHandler = require("express-async-handler");
-const {
-  updateRequest,
-  checkBodyForEmptyFields,
-} = require("../utils/helperFunctions");
 
-// @route GET /requests
-// @desc Get list of requests for logged-in user
+// @route GET /requests/sitter
+// @desc get requests for logged in user
 // @access Private
-exports.loadRequests = asyncHandler(async (req, res, next) => {
+exports.getRequests = asyncHandler(async (req, res) => {
+  const { isSitter } = await Profile.findOne(
+    { userId: req.user.id },
+    "isSitter -_id"
+  );
+  const selectedUserType = isSitter ? "sitter" : "owner";
   const requests = await Request.find({
-    userId: req.user.id,
-  });
+    [selectedUserType]: req.user.id,
+  })
+    .populate("sitter")
+    .populate("owner")
+    .sort("start")
+    .exec();
 
-  res.status(200).json(requests);
+  res.status(200).json({
+    success: { requests },
+  });
 });
 
 // @route POST /requests
 // @desc Create a new request
 // @access Private
-exports.newRequest = asyncHandler(async (req, res, next) => {
-  if (
-    Object.keys(req.body).length === 0 &&
-    Object.keys(req.query).length !== 0
-  ) {
-    res.status(400).json({
-      status: "POST to /routes failed",
-      message: "Request cannot be made in query parameters",
-    });
+exports.createRequest = asyncHandler(async (req, res) => {
+  const { sitter, start, end } = req.body;
+
+  const propertyIsMissing = !sitter || !start || !end;
+
+  if (propertyIsMissing || !mongoose.Types.ObjectId.isValid(sitter)) {
+    res.status(400);
+    throw new Error("Bad request");
   }
 
-  const data = req.body;
-
-  const request = new Request({
-    userId: data.userId,
-    sitterId: data.sitterId,
-    start: data.start,
-    end: data.end,
-    accepted: data.accepted,
-    declined: data.declined,
-    paid: data.paid,
-    address: {
-      houseNumber: data.address.houseNumber,
-      street: data.address.street,
-      district: data.address.district,
-      city: data.address.city,
-      county: data.address.county,
-      postalCode: data.address.postalCode,
-      country: data.address.country,
-    },
+  const request = await Request.create({
+    owner: req.user.id,
+    sitter,
+    start: start,
+    end: end,
+    status: "pending",
   });
 
-  await request.save();
-
-  res.status(200).json(request);
-});
-
-// @route PATCH /requests/:requestId
-// @desc Update request with approved or declined
-// @access Private
-exports.updateRequest = asyncHandler(async (req, res, next) => {
-  const requestId = req.params.requestId;
-
-  const fieldsToChange = checkBodyForEmptyFields(
-    req,
-    "accepted",
-    "declined",
-    "paid"
-  );
-
-  let request;
-  if (requestId) {
-    request = await Request.findOne({
-      _id: requestId,
-    });
-  } else {
-    throw new Error("requestID field required to find proper request");
+  if (!request) {
+    res.status(500);
+    throw new Error("Internal server error");
   }
 
-  request = updateRequest(request, fieldsToChange, req);
-  await request.save();
+  res.status(201).json({
+    success: { request },
+  });
+});
 
-  res.status(200).json(request);
+// @route PATCH /requests/
+// @desc Update request status
+// @access Private
+exports.updateRequestStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  const validStatuses = ["declined", "accepted"];
+  if (!validStatuses.includes(status)) {
+    res.status(400);
+    throw new Error("Bad request");
+  }
+
+  const { requestId } = req.params;
+  const request = await Request.findById(requestId);
+
+  if (!mongoose.Types.ObjectId.isValid(requestId)) {
+    res.status(400);
+    throw new Error("Bad request");
+  }
+
+  if (!request) {
+    throw new Error("Bad request");
+  }
+
+  const { sitter } = request;
+  if (req.user.id !== sitter.toString()) {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
+
+  request.status = status;
+  const updatedRequest = await request.save();
+
+  res.status(200).json({
+    success: { request: updatedRequest },
+  });
 });

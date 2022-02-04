@@ -6,24 +6,50 @@ import { Input } from '@mui/material';
 import { Avatar } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../../../context/useAuthContext';
+import { useSnackBar } from '../../../context/useSnackbarContext';
+import editProfilePhoto from '../../../helpers/APICalls/editProfilePhoto';
+import { PhotoLink } from '../../../interface/PhotoLink';
+import React, { useState } from 'react';
 
 interface ProfilePhotoProps {
   header: string;
-  imageUrl: string;
 }
 
 const openFileSelector = () => {
   document.getElementById('photoInput')?.click();
 };
 
-const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ header, imageUrl }) => {
+const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ header }) => {
+  const { updateSnackBarMessage } = useSnackBar();
+  const { profile } = useAuth();
+  const [preview, setPreview] = useState('');
+
+  const uploadHandler = async (e: any) => {
+    const file = e.target.files[0];
+    if (file['type'].split('/')[0] === 'image') {
+      setPreview(URL.createObjectURL(file));
+      const formData = new FormData();
+      formData.append('image', file);
+
+      await editProfilePhoto(formData).then((data: PhotoLink) => {
+        if (data.success) {
+          updateSnackBarMessage('Profile photo updated!');
+        } else if (data.error) {
+          updateSnackBarMessage('An error occured while uploading your photo');
+        }
+      });
+    } else {
+      updateSnackBarMessage('Please upload image files only');
+    }
+  };
+
   return (
     <Box sx={{ textAlign: 'center' }}>
       <SettingHeader header={header} />
-
       <Avatar
         id="photo"
-        src={imageUrl}
+        src={preview || profile?.photo || ''}
         sx={{
           width: 100,
           height: 100,
@@ -46,7 +72,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ header, imageUrl }) => {
         Be sure to use a photo that clearly shows your face
       </Typography>
 
-      <Input id="photoInput" type="file" sx={{ display: 'block', visibility: 'hidden' }} />
+      <Input id="photoInput" type="file" sx={{ display: 'block', visibility: 'hidden' }} onChange={uploadHandler} />
 
       <Button
         sx={{

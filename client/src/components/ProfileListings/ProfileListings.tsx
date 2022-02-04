@@ -1,11 +1,26 @@
 import { Grid } from '@mui/material';
+import { Link } from 'react-router-dom';
 import UserCard from '../UserCard/UserCard';
 
-const ProfileListings = () => {
+const ProfileListings = (): JSX.Element => {
   return (
     <Grid container rowSpacing={4} sx={{ padding: '0 5vw' }}>
       {dummyData.map((user) => (
-        <Grid item display="flex" justifyContent="center" xs={12} sm={6} md={4} key={user.name}>
+        <Grid
+          key={user.id}
+          component={Link}
+          to={{
+            pathname: `/profile/${user.id}`,
+            state: { userId: user.id },
+          }}
+          item
+          sx={{ textDecoration: 'none' }}
+          display="flex"
+          justifyContent="center"
+          xs={12}
+          sm={6}
+          md={4}
+        >
           <UserCard
             photo={user.photo}
             name={user.name}
@@ -25,6 +40,7 @@ export default ProfileListings;
 
 const dummyData = [
   {
+    id: '61f04fd0842abc3845f9c4aa',
     photo:
       'https://static.remove.bg/remove-bg-web/6cc620ebfb5922c21227f533a09d892abd65defa/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png',
     name: 'Norma Byers',
@@ -35,6 +51,7 @@ const dummyData = [
     rate: 14,
   },
   {
+    id: '2',
     photo:
       'https://static.remove.bg/remove-bg-web/6cc620ebfb5922c21227f533a09d892abd65defa/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png',
     name: 'Micheal Carnahan',
@@ -45,6 +62,7 @@ const dummyData = [
     rate: 20,
   },
   {
+    id: '3',
     photo:
       'https://static.remove.bg/remove-bg-web/6cc620ebfb5922c21227f533a09d892abd65defa/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png',
     name: 'Jessica Pearson',
@@ -55,6 +73,7 @@ const dummyData = [
     rate: 15,
   },
   {
+    id: '4',
     photo:
       'https://static.remove.bg/remove-bg-web/6cc620ebfb5922c21227f533a09d892abd65defa/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png',
     name: 'Charles Compton',
@@ -65,6 +84,7 @@ const dummyData = [
     rate: 15,
   },
   {
+    id: '5',
     photo:
       'https://static.remove.bg/remove-bg-web/6cc620ebfb5922c21227f533a09d892abd65defa/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png',
     name: 'Charlotte Butler',
@@ -75,6 +95,7 @@ const dummyData = [
     rate: 17,
   },
   {
+    id: '6',
     photo:
       'https://static.remove.bg/remove-bg-web/6cc620ebfb5922c21227f533a09d892abd65defa/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png',
     name: 'Joan Blakeney',

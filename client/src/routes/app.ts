@@ -47,13 +47,14 @@ export const appRoutes: AppRouteType[] = [
     exact: false,
   },
   {
+
     to: '/mysitters',
     component: CustomerBookings,
     canView: [AccountType.PET_OWNER],
     exact: false,
   },
   {
-    to: '/profile/detail',
+    to: '/profile/:userId',
     component: ProfileDetail,
     canView: [AccountType.PET_OWNER, AccountType.PET_SITTER],
     exact: false,
