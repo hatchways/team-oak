@@ -76,9 +76,7 @@ app.use("/upload", uploadImageRouter);
 app.use("/notifications", notificationRouter);
 app.use("/requests", requestRouter);
 app.use("/connect", stripeRouter);
-app.use("/payment", paymentRouter);
-app.use("/availability", availabilityRouter);
-app.use("/profilePhoto", profilePhotoRouter);
+app.use("/payments", paymentRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));

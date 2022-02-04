@@ -21,7 +21,12 @@ exports.uploadImageHelper = uploadImageHelper;
 exports.uploadImage = asyncHandler(async (req, res, next) => {
   const userId = req.user.id;
   try {
-    const url = await uploadImageHelper(userId, req.file);
+    const file = dataUri(req.file).content;
+    const uploadResponse = await cloudinary.uploader.upload(file, {
+      folder: `team_oak/${userId}`,
+    });
+    const url = uploadResponse.url;
+
     res.status(200).json({
       message: "Successful upload",
       data: {

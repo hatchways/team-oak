@@ -28,7 +28,11 @@ const paymentSchema = new mongoose.Schema(
     customerId: {
       type: String,
     },
-    isPaid: {
+    paid: {
+      type: Boolean,
+      default: false,
+    },
+    cancel: {
       type: Boolean,
       default: false,
     },

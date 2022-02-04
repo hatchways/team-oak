@@ -7,15 +7,16 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 // @access Private
 exports.getAllPayments = asyncHandler(async (req, res, next) => {
   const payment = await Payment.find({ userId: req.user.id });
-
-  res.status(200).json({
-    success: {
-      payment: payment,
-    },
-  });
-
-  res.status(404);
-  throw new Error("Payments Not Found");
+  if (payment) {
+    res.status(200).json({
+      success: {
+        payment: payment,
+      },
+    });
+  } else {
+    res.status(404);
+    throw new Error("Payments Not Found");
+  }
 });
 
 // @route GET /payments/:id
