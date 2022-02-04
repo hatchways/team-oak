@@ -45,8 +45,8 @@ const GenerateFormInterface = (day: string, values: any, setFieldValue: any, han
             checked={values[day].active}
             onChange={(e: any) => {
               if (!e.target.checked) {
-                setFieldValue(`${day}.startTime`, '0');
-                setFieldValue(`${day}.endTime`, '0');
+                setFieldValue(`${day}.startTime`, '');
+                setFieldValue(`${day}.endTime`, '');
               } else {
                 setFieldValue(`${day}.startTime`, '10');
                 setFieldValue(`${day}.endTime`, '22');
