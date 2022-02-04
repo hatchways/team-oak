@@ -42,13 +42,13 @@ const menuItems = [
   },
   {
     item: 'My Jobs',
-    resource: '/my-jobs',
+    resource: '/bookings',
     canView: [AccountType.PET_SITTER],
     authenticated: true,
   },
   {
     item: 'My Sitters',
-    resource: '/sitters',
+    resource: '/mysitters',
     canView: [AccountType.PET_OWNER],
     authenticated: true,
   },
