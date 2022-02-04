@@ -21,12 +21,46 @@ import { useStyles } from './useStyles';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Settings, Logout, Person, Menu as MenuIcon } from '@mui/icons-material';
 import { Box } from '@mui/system';
+import { theme } from '../../themes/theme';
+import EditProfile from '../../pages/Settings/EditProfile/EditProfile';
+import ProfilePhoto from '../../pages/Settings/ProfilePhoto/ProfilePhoto';
+import Availability from '../../pages/Settings/Availability/Availability';
+import SettingHeader from '../SettingsHeader/SettingsHeader';
+import { ConnectStripe } from '../ConnectStripe/ConnectStripe';
 
 const NavbarButton = styled(Button)({
   padding: '10px 0',
 });
 
-const menuItems = [
+const settingsMenuItems = [
+  {
+    item: 'Edit profile',
+    resource: '/profile/settings/edit-profile',
+    component: <EditProfile header="Edit Profile" />,
+  },
+  {
+    item: 'Profile photo',
+    resource: '/profile/settings/profile-photo',
+    component: <ProfilePhoto header="Profile Photo" imageUrl="" />,
+  },
+  {
+    item: 'Availability',
+    resource: '/profile/settings/availability',
+    component: <Availability header="Your Availability" />,
+  },
+  {
+    item: 'Payment methods',
+    resource: '/profile/settings/payment-methods',
+    component: <SettingHeader header="Payment Methods" />,
+  },
+  {
+    item: 'Billing',
+    resource: '/profile/settings/billing',
+    component: <ConnectStripe header="Billing" />,
+  },
+];
+
+const standardMenuItems = [
   {
     item: 'Become a Sitter',
     resource: '/dashboard',
@@ -97,12 +131,13 @@ const MenuItem: React.FC<{
   );
 };
 
-const MenuItems = () => {
+const MenuItems = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const { loggedInUser, logout } = useAuth();
   const open = Boolean(anchorEl);
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleMenuOpen = () => {
     setAnchorEl(menuRef.current);
@@ -119,13 +154,17 @@ const MenuItems = () => {
 
   const renderMenuItems = () => {
     // TODO: conditionally render based on profile type
-    return menuItems.map((menu) => {
-      if (menu.authenticated) {
-        return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
-      } else {
-        return !loggedInUser && <MenuItem key={menu.resource} {...menu} />;
-      }
-    });
+    return matches && props.menuType === 'settings'
+      ? settingsMenuItems.map((menu) => {
+          return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+        })
+      : standardMenuItems.map((menu) => {
+          if (menu.authenticated) {
+            return loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+          } else {
+            return !loggedInUser && <MenuItem key={menu.resource} {...menu} />;
+          }
+        });
   };
 
   return (
@@ -142,51 +181,55 @@ const MenuItems = () => {
       {loggedInUser && (
         <Grid xs={2} item>
           <>
-            <IconButton
-              size="large"
-              aria-label="account profile picture"
-              aria-controls="menu-navbar"
-              arais-haspopup="true"
-              onClick={handleMenuOpen}
-              color="inherit"
-            >
-              <img style={{ width: 50 }} src={`https://robohash.org/${loggedInUser.email}`} />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              <DropdownMenuItem component={NavLink} to="/profile/settings" onClick={handleClose}>
-                <ListItemIcon>
-                  <Settings fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Settings</ListItemText>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Person fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Profile</ListItemText>
-              </DropdownMenuItem>
-              <Divider />
-              <DropdownMenuItem onClick={handleLogout}>
-                <ListItemIcon>
-                  <Logout fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Logout</ListItemText>
-              </DropdownMenuItem>
-            </Menu>
+            {matches ? null : (
+              <>
+                <IconButton
+                  size="large"
+                  aria-label="account profile picture"
+                  aria-controls="menu-navbar"
+                  arais-haspopup="true"
+                  onClick={handleMenuOpen}
+                  color="inherit"
+                >
+                  <img style={{ width: 50 }} src={`https://robohash.org/${loggedInUser.email}`} />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={handleClose}
+                >
+                  <DropdownMenuItem component={NavLink} to="/profile/settings" onClick={handleClose}>
+                    <ListItemIcon>
+                      <Settings fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Settings</ListItemText>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                      <Person fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Profile</ListItemText>
+                  </DropdownMenuItem>
+                  <Divider />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <ListItemIcon>
+                      <Logout fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Logout</ListItemText>
+                  </DropdownMenuItem>
+                </Menu>
+              </>
+            )}
           </>
         </Grid>
       )}
@@ -194,12 +237,13 @@ const MenuItems = () => {
   );
 };
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC = (props) => {
   const location = useLocation();
   const classes = useStyles();
 
   const [displayDrawer, setDisplayDrawer] = useState<boolean>(false);
   const isDesktop = useMediaQuery('(min-width: 700px)');
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
 
   const toggleDrawer = (toggle: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -213,7 +257,7 @@ const Navbar: React.FC = () => {
     setDisplayDrawer(toggle);
   };
 
-  return (
+  const standardNav = (
     <Grid
       className={clsx(classes.navbar, location.pathname === '/' && classes.transparentNavbar)}
       justifyContent="space-between"
@@ -245,6 +289,54 @@ const Navbar: React.FC = () => {
       </Grid>
     </Grid>
   );
+
+  function isSettingsMenu() {
+    if (props.hasOwnProperty('children')) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (props.children.hasOwnProperty('menuType')) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (props.children.menuType === 'settings') {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  const settingsNav = matches ? (
+    <Grid
+      className={clsx(classes.navbar, location.pathname === '/' && classes.transparentNavbar)}
+      justifyContent="flex-end"
+      alignItems="center"
+      container
+      boxShadow={'none !important'}
+    >
+      <Grid xs={12} md={6} item display="flex" justifyContent="flex-end">
+        {matches && isSettingsMenu() ? (
+          <>
+            <IconButton onClick={toggleDrawer(true)}>
+              <MenuIcon sx={{ color: '#000', fontSize: '30px' }} />
+            </IconButton>
+            <SwipeableDrawer
+              anchor="right"
+              open={displayDrawer}
+              onClose={toggleDrawer(false)}
+              onOpen={toggleDrawer(true)}
+              className={classes.drawer}
+            >
+              <MenuItems menuType={'settings'} />
+            </SwipeableDrawer>
+          </>
+        ) : (
+          'failure'
+        )}
+      </Grid>
+    </Grid>
+  ) : null;
+
+  return props.hasOwnProperty('children') ? settingsNav : standardNav;
 };
 
 export { Navbar };

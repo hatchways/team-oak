@@ -1890,6 +1890,16 @@
   "resolved" "git+ssh://git@github.com/stripe/stripe-js.git#282bb5383186b0581fdc9d59439278c3812ddd8b"
   "version" "1.22.0"
 
+"@stripe/react-stripe-js@github:stripe/react-stripe-js":
+  "resolved" "git+ssh://git@github.com/stripe/react-stripe-js.git#3a1dcae3d2d5aa5ac653b2406fd2b8ea67ef39a3"
+  "version" "1.7.0"
+  dependencies:
+    "prop-types" "^15.7.2"
+
+"@stripe/stripe-js@^1.20.3", "@stripe/stripe-js@github:stripe/stripe-js":
+  "resolved" "git+ssh://git@github.com/stripe/stripe-js.git#0e64b16301d52b27fd6a522b37abdff4895251d7"
+  "version" "1.22.0"
+
 "@surma/rollup-plugin-off-main-thread@^1.1.1":
   "integrity" "sha512-yBMPqmd1yEJo/280PAMkychuaALyQ9Lkb5q1ck3mjJrFuEobIfhnQ4J3mbvBoISmR3SWMWV+cGB/I0lCQee79A=="
   "resolved" "https://registry.npmjs.org/@surma/rollup-plugin-off-main-thread/-/rollup-plugin-off-main-thread-1.4.2.tgz"
