@@ -48,7 +48,7 @@ const menuItems = [
   },
   {
     item: 'My Sitters',
-    resource: '/sitters',
+    resource: '/mysitters',
     canView: [AccountType.PET_OWNER],
     authenticated: true,
   },
