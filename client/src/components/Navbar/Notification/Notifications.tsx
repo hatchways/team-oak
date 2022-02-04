@@ -69,17 +69,25 @@ const Notifications = (): JSX.Element => {
     setNotifs([]);
   };
 
-  const socket = io();
-  socket.on('newNotification', async () => {
+  const fetchUnread = async () => {
     try {
       const unreadNotifs = await getUnreadNotifications();
-      if (unreadNotifs) {
+      if (unreadNotifs.length > 0) {
         setNotifs(unreadNotifs);
         setActive(true);
       }
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const socket = io();
+  socket.on('connect', () => {
+    fetchUnread();
+
+    socket.on('newNotification', async () => {
+      fetchUnread();
+    });
   });
 
   return (
