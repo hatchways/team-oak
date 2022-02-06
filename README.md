@@ -47,16 +47,16 @@ A web application to connect pet owners (who need help finding a sitter for thei
 
 1. Sign up. Users will be able to create a new account using their email, name, and password. There is also a 'demo' option which does not require login.
 
-![Signup Demo](demo/images/signup.png)
+![Signup Demo](demo/signup.png)
 
 2. Dashboard. Once logged in, users can view potential pet sitters. Clicking on each card will lead to their profiles and booking pages.
 
-![Dashboard](demo/images/dashboard.png)
+![Dashboard](demo/dashboard.png)
 
 3. Availability. Pet sitters can update and set their availability schedules for pet owners to see.
 
-![Availability](demo/images/availability.png)
+![Availability](demo/availability.png)
 
 4. Payments. Pet owners can view and pay invoices for upcoming and past bookings.
 
-![Payments](demo/images/payments.png)
+![Payments](demo/payments.png)
